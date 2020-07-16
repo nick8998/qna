@@ -1,6 +1,8 @@
 class AnswersController < ApplicationController
 
+  before_action :load_answer, only: %i[show edit update destroy]
   before_action :find_question, only: %i[new create]
+
   def show;  end
 
   def new
@@ -20,7 +22,7 @@ class AnswersController < ApplicationController
   end
 
   def update
-    if answer.update(answer_params)
+    if @answer.update(answer_params)
       redirect_to @answer
     else
       render :edit
@@ -28,23 +30,21 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    answer.destroy
-    redirect_to question_path(answer.question)
+    @answer.destroy
+    redirect_to question_path(@answer.question)
   end
 
   private 
 
-  def answer
-    @answer ||= params[:id] ? Answer.find(params[:id]) : Answer.new
-  end
-
-  helper_method :answer
-
-  def answer_params
-    params.require(:answer).permit(:body)    
+  def load_answer
+    @answer = Answer.find(params[:id])
   end
 
   def find_question
-    @question = Question.find(params[:question_id])    
+    @question = Question.find(params[:question_id])
+  end
+
+  def answer_params
+    params.require(:answer).permit(:body)    
   end
 end
