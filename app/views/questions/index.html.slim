@@ -1,1 +1,14 @@
 p = link_to 'Ask question', new_question_path
+
+table class="table"
+  <tr>
+    <th>Title</th>
+    <th>Body</th>
+    <th>Action</th>
+  </tr>
+    -@questions.each do |question|
+      <tr>
+        td=question.title
+        td=question.body
+        td=link_to 'Show', question_path(question)
+      </tr>

@@ -7,7 +7,9 @@ class QuestionsController < ApplicationController
     @questions = Question.all
   end
 
-  def show;  end
+  def show
+    @answer = @question.answers.new
+  end
 
   def new
     @question = Question.new
@@ -17,7 +19,7 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
-
+    @question.author_id = current_user.id
     if @question.save
       redirect_to @question, notice: "Your question successfully created."
     else 
@@ -34,8 +36,13 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    @question.destroy
-    redirect_to questions_path
+    if @question.author_id == current_user.id
+      @question.destroy
+      redirect_to questions_path, notice: "Question was destroyed"
+    else
+      redirect_to questions_path, alert: "You can't destroy question"
+    end
+
   end
 
   private
@@ -44,7 +51,6 @@ class QuestionsController < ApplicationController
     @question = Question.find(params[:id])
   end
 
-  helper_method :question
   
   def question_params
     params.require(:question).permit(:title, :body)    

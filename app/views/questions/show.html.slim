@@ -1,2 +1,23 @@
 h1= @question.title
 p= @question.body
+p= link_to 'Destroy question', question_path(@question), method: :delete
+
+table
+  <tr>
+    <th>Body</th>
+    <th>Action</th>
+  </tr>
+  -@question.answers.each do |a|
+    -if a.id.present?
+      <tr>
+        td= a.body
+        td= link_to 'Destroy answer', answer_path(a), method: :delete
+      </tr>
+        
+
+= form_with model: [@question, @answer], local: true do |f|
+  = render 'shared/errors', resource: @answer
+  = f.label :body
+  = f.text_area :body
+  = f.submit 'To answer'
+

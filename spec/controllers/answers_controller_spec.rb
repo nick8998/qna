@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
   let(:user) { create(:user) }
   let(:question) { create(:question) }
-  let(:answer) { create(:answer, question_id: question.id) }
+  let(:answer) { create(:answer, question_id: question.id, author_id: user.id) }
 
   describe 'GET #show' do
     before { get :show, params: { id: answer.id } }
@@ -19,7 +19,7 @@ RSpec.describe AnswersController, type: :controller do
 
   describe 'GET #new' do
     before { login(user) }
-    before { get :new, params: { question_id: question.id } } 
+    before { get :new, params: { question_id: question.id, author_id: user.id } } 
     it 'render new view' do
       expect(response).to render_template :new
     end
@@ -42,23 +42,23 @@ RSpec.describe AnswersController, type: :controller do
     before { login(user) }
     context 'with valid attributes' do
       it 'save a new answer in the database' do
-        expect { post :create, params: { answer: attributes_for(:answer), question_id: question.id } }.to change(question.answers, :count).by(1)
+        expect { post :create, params: { answer: attributes_for(:answer), question_id: question.id, author_id: user.id } }.to change(question.answers, :count).by(1)
       end
 
       it 'redirects to show view' do
-        post :create, params: { answer: attributes_for(:answer), question_id: question.id }
+        post :create, params: { answer: attributes_for(:answer), question_id: question.id, author_id: user.id }
 
-        expect(response).to redirect_to assigns(:answer)
+        expect(response).to redirect_to assigns(:question)
       end
     end
 
     context 'with invalid attributes' do
       it 'does not save the answer' do
-        expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id }}.to_not change(question.answers, :count)
+        expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, author_id: user.id }}.to_not change(question.answers, :count)
       end
 
       it 're-renders new view' do
-        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id }
+        post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, author_id: user.id }
 
         expect(response).to render_template :new
       end

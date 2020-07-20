@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
   let(:user) { create(:user) }
-  let(:question) { create(:question) }
+  let(:question) { create(:question, author_id: user.id) }
 
   describe 'GET #index' do 
     let(:questions) { create_list(:question, 3) }
@@ -33,7 +33,7 @@ RSpec.describe QuestionsController, type: :controller do
   describe 'GET #new' do
     before { login(user) }
 
-    before { get :new }
+    before { get :new, params: { author_id: user.id } }
     it 'render new view' do
       expect(response).to render_template :new
     end
@@ -41,7 +41,7 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #edit' do
     before { login(user) }
-    before { get :edit, params: { id: question } }
+    before { get :edit, params: { id: question, author_id: user.id } }
 
     it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
@@ -56,7 +56,7 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user) }
     context 'with valid attributes' do
       it 'save a new question in the database' do
-        expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+        expect { post :create, params: { question: attributes_for(:question), params: { author_id: user.id } } }.to change(Question, :count).by(1)
       end
 
       it 'redirects to show view' do

@@ -8,6 +8,7 @@ feature 'User can create question', %q{
 
 
   given(:user) {create(:user)}
+  given(:user1) {create(:user)}
 
     describe 'Authenticated user' do
       background do
@@ -39,5 +40,63 @@ feature 'User can create question', %q{
       click_on 'Ask question'
 
       expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    end
+
+    describe 'User' do
+      background do
+        sign_in(user)
+
+        visit questions_path
+        click_on 'Ask question'
+        fill_in 'Title', with: 'Test question'
+        fill_in 'Body', with: 'text text text'
+        click_on 'Ask'
+        visit questions_path
+        click_on 'Ask question'
+        fill_in 'Title', with: 'Test question1'
+        fill_in 'Body', with: 'text text text1'
+        click_on 'Ask'
+      end
+
+      scenario 'authenticated can browse questions' do
+        visit questions_path
+        expect(page).to have_content 'TitleBody'
+        expect(page).to have_content 'Test questiontext text text'
+        expect(page).to have_content 'Test question1text text text1'
+      end
+
+      scenario 'unauthenticated can browse questions' do
+        click_on 'Logout' 
+        visit questions_path
+        expect(page).to have_content 'TitleBody'
+        expect(page).to have_content 'Test questiontext text text'
+        expect(page).to have_content 'Test question1text text text1'
+      end
+
+      scenario  "can't destroy question" do
+        click_on 'Logout'
+        sign_in(user1)
+        click_on('Show', match: :first)
+        click_on 'Destroy question'
+        expect(page).to have_content "You can't destroy question"
+      end
+    end
+
+    describe 'Author' do
+      background do
+        sign_in(user)
+
+        visit questions_path
+        click_on 'Ask question'
+        fill_in 'Title', with: 'Test question'
+        fill_in 'Body', with: 'text text text'
+        click_on 'Ask'
+      end
+
+      scenario 'can destroy question' do
+        click_on 'Destroy question'
+
+        expect(page).to have_content 'Question was destroyed'
+      end
     end
 end
