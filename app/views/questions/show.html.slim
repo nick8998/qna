@@ -1,5 +1,5 @@
-h1= @question.title
-p= @question.body
+h1 class="q-title"= @question.title
+p class="q-body"= @question.body
 p= link_to 'Destroy question', question_path(@question), method: :delete
 
 table
@@ -10,7 +10,7 @@ table
   -@question.answers.each do |a|
     -if a.id.present?
       <tr>
-        td= a.body
+        td class="a-body" = a.body
         td= link_to 'Destroy answer', answer_path(a), method: :delete
       </tr>
         

@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[index show]
-  before_action :load_question, only: %i[show edit update destroy]
+  before_action :find_question, only: %i[show edit update destroy]
 
   def index
     @questions = Question.all
@@ -19,7 +19,7 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
-    @question.author_id = current_user.id
+    @question.author = current_user
     if @question.save
       redirect_to @question, notice: "Your question successfully created."
     else 
@@ -36,7 +36,7 @@ class QuestionsController < ApplicationController
   end
 
   def destroy
-    if @question.author_id == current_user.id
+    if current_user.author_of?(@question)
       @question.destroy
       redirect_to questions_path, notice: "Question was destroyed"
     else
@@ -47,7 +47,7 @@ class QuestionsController < ApplicationController
 
   private
 
-  def load_question
+  def find_question
     @question = Question.find(params[:id])
   end
 

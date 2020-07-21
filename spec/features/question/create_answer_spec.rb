@@ -22,73 +22,54 @@ feature 'User can create answer the question', %q{
         click_on 'To answer'
 
         expect(page).to have_content 'Your answer successfully created.'
-        expect(page).to have_content 'text text text'
+        within '.a-body' do
+          expect(page).to have_content 'text text text'
+        end
+        expect(page).to have_current_path question_path(question)
       end
 
-      scenario 'asks cd a answer with errors' do
+      scenario 'answers cd a answer with errors' do
         click_on 'To answer'
-        expect(page).to have_content "Body can't be blank"
+        expect(page).not_to have_css '.a-body'
+        expect(page).to have_current_path question_path(question)
       end
+
     end
 
-    scenario 'Unauthenticated user tries to ask a question' do
+    scenario 'Unauthenticated user tries to answer a question' do
       visit question_path(question)
       click_on 'To answer'
 
       expect(page).to have_content 'You need to sign in or sign up before continuing.'
     end
 
-    describe 'User' do
-      background do
-        sign_in(user)
-
-        visit question_path(question)
-        fill_in 'Body', with: 'text text text'
-        click_on 'To answer'
-        visit question_path(question)
-        fill_in 'Body', with: 'text text text1'
-        click_on 'To answer'
-      end
-
-      scenario 'authenticated can browse answers' do
-        expect(page).to have_content 'Body'
-        expect(page).to have_content 'text text text'
-        expect(page).to have_content 'text text text1'
-      end
-
-      scenario 'unauthenticated can browse answers' do
-        click_on 'Logout' 
-        visit question_path(question)
-        expect(page).to have_content 'Body'
-        expect(page).to have_content 'text text text'
-        expect(page).to have_content 'text text text1'
-      end
+    describe 'Not author' do
+      given!(:answer) { create(:answer, question: question) } 
 
       scenario  "can't destroy answer" do
-        click_on 'Logout'
         sign_in(user1)
         visit question_path(question)
         click_on('Destroy answer', match: :first)
         expect(page).to have_content "You can't destroy answer"
+        expect(page).to have_current_path question_path(question)
       end
     end
 
-    describe 'Author' do
-      background do
-        sign_in(user)
+  describe 'Author' do
+    background do
+      sign_in(user)
 
-        visit question_path(question)
-        fill_in 'Body', with: 'text text text'
-        click_on 'To answer'
-      end
-
-      scenario 'can destroy question' do
-        click_on 'Destroy answer'
-
-        expect(page).to have_content 'Answer was destroyed'
-      end
+      visit question_path(question)
+      fill_in 'Body', with: 'MyText'
+      click_on 'To answer'
     end
 
+    scenario 'can destroy question' do
+      click_on 'Destroy answer'
 
+      expect(page).to have_content 'Answer was destroyed'
+      expect(page).to have_current_path question_path(question)
+    end
+  end
 
 end

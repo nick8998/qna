@@ -24,14 +24,21 @@ feature 'User can create question', %q{
         click_on 'Ask'
 
         expect(page).to have_content 'Your question successfully created.'
-        expect(page).to have_content 'Test question'
-        expect(page).to have_content 'text text text'
+        within '.q-title' do
+          expect(page).to have_content 'Test question'
+        end
+        within '.q-body' do
+          expect(page).to have_content 'text text text'
+        end
       end
 
       scenario 'asks cd a question with errors' do
         click_on 'Ask'
 
         expect(page).to have_content "Title can't be blank"
+        expect(page).not_to have_css '.q-body'
+        expect(page).not_to have_css '.q-title'
+        expect(page).to have_current_path questions_path
       end
     end
 
@@ -42,43 +49,15 @@ feature 'User can create question', %q{
       expect(page).to have_content 'You need to sign in or sign up before continuing.'
     end
 
-    describe 'User' do
-      background do
-        sign_in(user)
+    describe 'Not author' do
+      given!(:question) { create(:question) } 
 
-        visit questions_path
-        click_on 'Ask question'
-        fill_in 'Title', with: 'Test question'
-        fill_in 'Body', with: 'text text text'
-        click_on 'Ask'
-        visit questions_path
-        click_on 'Ask question'
-        fill_in 'Title', with: 'Test question1'
-        fill_in 'Body', with: 'text text text1'
-        click_on 'Ask'
-      end
-
-      scenario 'authenticated can browse questions' do
-        visit questions_path
-        expect(page).to have_content 'TitleBody'
-        expect(page).to have_content 'Test questiontext text text'
-        expect(page).to have_content 'Test question1text text text1'
-      end
-
-      scenario 'unauthenticated can browse questions' do
-        click_on 'Logout' 
-        visit questions_path
-        expect(page).to have_content 'TitleBody'
-        expect(page).to have_content 'Test questiontext text text'
-        expect(page).to have_content 'Test question1text text text1'
-      end
-
-      scenario  "can't destroy question" do
-        click_on 'Logout'
+      scenario  "can't destroy answer" do
         sign_in(user1)
         click_on('Show', match: :first)
         click_on 'Destroy question'
         expect(page).to have_content "You can't destroy question"
+        expect(page).to have_current_path questions_path
       end
     end
 
@@ -97,6 +76,7 @@ feature 'User can create question', %q{
         click_on 'Destroy question'
 
         expect(page).to have_content 'Question was destroyed'
+        expect(page).to have_current_path questions_path
       end
     end
 end
