@@ -7,21 +7,22 @@ feature 'User can browse questions', %q{
 } do
 
   given(:user) { create(:user) }
-  given!(:question1) { create(:question) }
-  given!(:question2) { create(:question) }
+  given!(:questions) { create_list(:questions, 5) }
 
-    scenario 'authenticated can browse answers' do
+    scenario 'authenticated can browse questions' do
       sign_in(user)
       visit questions_path
       expect(page).to have_content 'TitleBody'
-      expect(page).to have_content 'MyStringMyText'
-      expect(page).to have_content 'MyStringMyText'
+      questions.each do |q|
+        expect(page).to have_content "#{q.title}#{q.body}"
+      end
     end
 
-    scenario 'unauthenticated can browse answers' do
+    scenario 'unauthenticated can browse questions' do
       visit questions_path
       expect(page).to have_content 'TitleBody'
-      expect(page).to have_content 'MyStringMyText'
-      expect(page).to have_content 'MyStringMyText'
+      questions.each do |q|
+        expect(page).to have_content "#{q.title}#{q.body}"
+      end
     end
 end

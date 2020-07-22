@@ -3,16 +3,15 @@ p class="q-body"= @question.body
 p= link_to 'Destroy question', question_path(@question), method: :delete
 
 table
-  <tr>
-    <th>Body</th>
-    <th>Action</th>
-  </tr>
+  tr
+    th= "Body"
+    th= "Action"
   -@question.answers.each do |a|
-    -if a.id.present?
-      <tr>
+    -if a.persisted?
+      tr
         td class="a-body" = a.body
-        td= link_to 'Destroy answer', answer_path(a), method: :delete
-      </tr>
+        -if current_user.present? and a.author_id == current_user.id 
+          td= link_to 'Destroy answer', answer_path(a), method: :delete
         
 
 = form_with model: [@question, @answer], local: true do |f|

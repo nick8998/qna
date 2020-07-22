@@ -45,7 +45,8 @@ RSpec.describe AnswersController, type: :controller do
         it 'redirects to question' do
           post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, author_id: user.id }
 
-          expect(response).to redirect_to question_path(question)
+          expect(response).to render_template "questions/show"
+          expect(assigns(:answer)).not_to eq answer
         end
       end
     end
@@ -91,13 +92,19 @@ RSpec.describe AnswersController, type: :controller do
       before { login(user) }
       let!(:answer) { create(:answer, question_id: question.id) }
 
-      it 'deletes the answer' do
+      it '(author) deletes the answer' do
         expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(0)
       end
 
       it 'redirect to question show view' do
         delete :destroy, params: { id: question }
         expect(response).to redirect_to question_path(question)
+      end
+
+      let(:user1) { create(:user) }
+      before { login(user1) }
+      it '(not author) deletes the answer' do
+        expect { delete :destroy, params: { id: answer } }.not_to change(Answer, :count)
       end
     end
   end
@@ -111,6 +118,7 @@ RSpec.describe AnswersController, type: :controller do
       before { get :edit, params: { id: answer, question_id: question,  author_id: user.id }  }
       it 'does not assigns the requested answer to @answer' do
         expect(assigns(:answer)).not_to eq answer
+        expect(response).to redirect_to new_user_session_path
       end
 
       it "does not render edit view" do
@@ -121,6 +129,7 @@ RSpec.describe AnswersController, type: :controller do
     describe 'POST #create' do
       it 'does not save a new answer in the database' do
         expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, author_id: user.id }}.to_not change(Answer, :count)
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
@@ -128,6 +137,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not assign the requested answer to @answer' do
         patch :update, params: { id: answer,  answer: attributes_for(:answer) }
         expect(assigns(:answer)).not_to eq answer
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
@@ -136,6 +146,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it "does not delete the answer" do
         expect { delete :destroy, params: { id: answer } }.not_to change(Answer, :count)
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end

@@ -34,11 +34,11 @@ RSpec.describe QuestionsController, type: :controller do
       let(:answer) { create(:answer, question: question) }
 
       it 'checks the class of @answer' do
-        expect(assigns(:answer).class).to eq answer.class
+        expect(assigns(:answer)).to be_a_new Answer
       end
 
       it 'checks association with new answer' do
-        expect(assigns(:answer).question).to eq answer.question
+        expect(assigns(:answer).question).to eq question
       end
     end
 
@@ -120,7 +120,7 @@ RSpec.describe QuestionsController, type: :controller do
           question.reload
 
           expect(question.title).to eq 'MyString'
-          expect(question.body).to eq 'MyText'
+          expect(question.body).to eq "MyText"
         end
 
         it 're-renders edit view' do
@@ -133,13 +133,19 @@ RSpec.describe QuestionsController, type: :controller do
       before { login(user) }
       let!(:question) { create(:question) }
 
-      it 'deletes the question' do
+      it '(author) deletes the question' do
         expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(0)
       end
 
       it 'redirect to index view' do
         delete :destroy, params: { id: question }
         expect(response).to redirect_to questions_path
+      end
+
+      let(:user1) { create(:user) }
+      before { login(user1) }
+      it '(not author) deletes the question' do
+        expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
       end
     end
   end
@@ -152,6 +158,7 @@ RSpec.describe QuestionsController, type: :controller do
       before { get :new }
       it 'does not render new view' do
         expect(response).not_to render_template :new
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
@@ -159,6 +166,7 @@ RSpec.describe QuestionsController, type: :controller do
       before { get :edit, params: { id: question, author_id: user.id }  }
       it 'does not assign the requested question to @question' do
         expect(assigns(:question)).not_to eq question
+        expect(response).to redirect_to new_user_session_path
       end
 
       it 'does not render edit view' do
@@ -169,6 +177,7 @@ RSpec.describe QuestionsController, type: :controller do
     describe 'POST #create' do
       it 'does not save a new question in the database' do
         expect { post :create, params: { question: attributes_for(:question), params: { author_id: user.id } } }.not_to change(user.authored_questions, :count)
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
@@ -176,6 +185,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not save a new question in the database' do
         patch :update, params: { id: question, question: attributes_for(:question) }
         expect(assigns(:question)).not_to eq question
+        expect(response).to redirect_to new_user_session_path
       end
     end
 
@@ -184,6 +194,7 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'does not delete the question' do
         expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
+        expect(response).to redirect_to new_user_session_path
       end
     end
   end

@@ -2,7 +2,7 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!
   before_action :find_answer, only: %i[edit update destroy]
-  before_action :find_question, only: %i[new create]
+  before_action :find_question, only: %i[create]
 
   def edit;  end
 
@@ -12,7 +12,7 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to @answer.question, notice: "Your answer successfully created."
     else 
-      redirect_to @answer.question
+      render "questions/show"
     end
   end
 
@@ -27,10 +27,12 @@ class AnswersController < ApplicationController
   def destroy
     if current_user.author_of?(@answer)
       @answer.destroy
-      redirect_to @answer.question, notice: "Answer was destroyed"
+      flash[:notice] = "Answer was destroyed"
     else
-      redirect_to @answer.question, alert: "You can't destroy answer"
+      flash[:alert] = "You can't destroy answer"
     end
+
+    redirect_to @answer.question
   end
 
   private 

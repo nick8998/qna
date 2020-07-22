@@ -8,21 +8,22 @@ feature 'User can browse answers', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question) }
-  given!(:answer1) { create(:answer, question: question) }
-  given!(:answer2) { create(:answer, question: question) }
+  given!(:answers) { create_list(:answers, 5, question: question) }
   
     scenario 'Authenticated user can browse answers' do
       sign_in(user)
       visit question_path(question)
       expect(page).to have_content 'Body'
-      expect(page).to have_content 'MyText'
-      expect(page).to have_content 'MyText'
+      answers.each do |a|
+        expect(page).to have_content "#{a.body}"
+      end
     end
 
     scenario 'Unauthenticated user can browse answers' do
       visit question_path(question)
       expect(page).to have_content 'Body'
-      expect(page).to have_content 'MyText'
-      expect(page).to have_content 'MyText'
+      answers.each do |a|
+        expect(page).to have_content "#{a.body}"
+      end
     end
 end

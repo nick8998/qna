@@ -11,6 +11,6 @@ class User < ApplicationRecord
 
 
   def author_of?(resourse)
-    resourse.author == self
+    resourse.author_id == self.id
   end
 end

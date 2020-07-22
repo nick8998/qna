@@ -1,0 +1,41 @@
+require 'rails_helper'
+
+feature 'Author can delete question', %q{
+  In order to delete question 
+  As an author
+  I'd like to be able to delete question
+} do
+  given(:user1) {create(:user)}
+  given(:user) {create(:user)}
+
+    describe 'Not author' do
+      given!(:question) { create(:question) } 
+
+      scenario  "can't destroy answer" do
+        sign_in(user1)
+        click_on('Show', match: :first)
+        click_on 'Destroy question'
+        expect(page).to have_content "You can't destroy question"
+        expect(page).to have_current_path questions_path
+      end
+    end
+
+    describe 'Author' do
+      background do
+        sign_in(user)
+
+        visit questions_path
+        click_on 'Ask question'
+        fill_in 'Title', with: 'Test question'
+        fill_in 'Body', with: 'text text text'
+        click_on 'Ask'
+      end
+
+      scenario 'can destroy question' do
+        click_on 'Destroy question'
+
+        expect(page).to have_content 'Question was destroyed'
+        expect(page).to have_current_path questions_path
+      end
+    end
+end
