@@ -21,14 +21,10 @@ feature 'Author can delete question', %q{
     end
 
     describe 'Author' do
+      given!(:question) { create(:question, author: user) }
       background do
         sign_in(user)
-
-        visit questions_path
-        click_on 'Ask question'
-        fill_in 'Title', with: 'Test question'
-        fill_in 'Body', with: 'text text text'
-        click_on 'Ask'
+        visit question_path(question)
       end
 
       scenario 'can destroy question' do
@@ -36,6 +32,8 @@ feature 'Author can delete question', %q{
 
         expect(page).to have_content 'Question was destroyed'
         expect(page).to have_current_path questions_path
+        expect(page).not_to have_content(question.title)
+        expect(page).not_to have_content(question.body)
       end
     end
 end

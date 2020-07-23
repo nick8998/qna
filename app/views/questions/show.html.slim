@@ -10,7 +10,7 @@ table
     -if a.persisted?
       tr
         td class="a-body" = a.body
-        -if current_user.present? and a.author_id == current_user.id 
+        -if current_user&.author_of?(a)
           td= link_to 'Destroy answer', answer_path(a), method: :delete
         
 

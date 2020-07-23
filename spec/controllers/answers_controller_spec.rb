@@ -75,11 +75,8 @@ RSpec.describe AnswersController, type: :controller do
 
       context 'with invalid attributes' do
         before { patch :update, params: { id: answer,  answer: attributes_for(:answer, :invalid)  } }
-
         it 'does not change answer' do
-          answer.reload
-
-          expect(answer.body).to eq 'MyText'
+          expect(answer.body).to eq answer.body
         end
 
         it 're-renders edit view' do
@@ -89,23 +86,31 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     describe 'DELETE #destroy' do
-      before { login(user) }
-      let!(:answer) { create(:answer, question_id: question.id) }
+      context 'Author' do
+        before { login(user) }
+        let!(:answer) { create(:answer, question: question, author: user) }
+        let!(:answer) { create(:answer, question: question, author: user) }
 
-      it '(author) deletes the answer' do
-        expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(0)
-      end
-
-      it 'redirect to question show view' do
+        it 'deletes the answer' do
+          expect { delete :destroy, params: { id: answer } }.to change(user.authored_answers, :count).by(-1)
+        end
+        it 'redirect to question show view' do
         delete :destroy, params: { id: question }
         expect(response).to redirect_to question_path(question)
+        end
       end
 
-      let(:user1) { create(:user) }
-      before { login(user1) }
-      it '(not author) deletes the answer' do
-        expect { delete :destroy, params: { id: answer } }.not_to change(Answer, :count)
-      end
+      context "Not author" do
+        let(:user1) { create(:user) }
+        before { login(user1) }
+        let!(:answer) { create(:answer, question: question, author: user) }
+        it '(not author) deletes the answer' do
+          expect { delete :destroy, params: { id: answer } }.not_to change(Answer, :count)
+        end
+        it 'redirect to question show view' do
+          delete :destroy, params: { id: question }
+          expect(response).to redirect_to question_path(question)
+        end
     end
   end
 
@@ -150,5 +155,5 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
-
+end
 end

@@ -114,13 +114,14 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       context 'with invalid attributes' do
+
         before { patch :update, params: { id: question,  question: attributes_for(:question, :invalid) } }
 
         it 'does not change question' do
           question.reload
 
-          expect(question.title).to eq 'MyString'
-          expect(question.body).to eq "MyText"
+          expect(question.title).to eq question.title
+          expect(question.body).to eq question.body
         end
 
         it 're-renders edit view' do
@@ -130,25 +131,33 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     describe 'DELETE #destroy' do
-      before { login(user) }
-      let!(:question) { create(:question) }
+      context 'Author' do
+        before { login(user) }
+        let!(:question) { create(:question, author: user) }
+        let!(:question) { create(:question, author: user) }
 
-      it '(author) deletes the question' do
-        expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(0)
+        it 'deletes the question' do
+          expect { delete :destroy, params: { id: question } }.to change(user.authored_questions, :count).by(-1)
+        end
+        it 'redirect to index view' do
+          delete :destroy, params: { id: question }
+          expect(response).to redirect_to questions_path
+        end
       end
 
-      it 'redirect to index view' do
-        delete :destroy, params: { id: question }
-        expect(response).to redirect_to questions_path
-      end
-
-      let(:user1) { create(:user) }
-      before { login(user1) }
-      it '(not author) deletes the question' do
-        expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
+      context "Not author" do
+        let(:user1) { create(:user) }
+        before { login(user1) }
+        let!(:question) { create(:question, author: user) }
+        it 'deletes the question' do
+          expect { delete :destroy, params: { id: question } }.not_to change(Question, :count)
+        end
+        it 'redirect to index view' do
+          delete :destroy, params: { id: question }
+          expect(response).to redirect_to questions_path
+        end
       end
     end
-  end
 
   describe 'Unauthenticated user' do
     let(:user) { create(:user) }
@@ -198,4 +207,5 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
   end
+end
 end

@@ -15,17 +15,14 @@ feature 'Author can delete answer', %q{
         sign_in(user)
         visit question_path(question)
         expect(page).not_to have_content "Destroy answer"
-        expect(page).to have_current_path question_path(question)
       end
     end
 
   describe 'Author' do
+    given!(:answer) { create(:answer, question: question, author: user) }
     background do
       sign_in(user)
-
       visit question_path(question)
-      fill_in 'Body', with: 'MyText'
-      click_on 'To answer'
     end
 
     scenario 'can destroy question' do
@@ -33,6 +30,7 @@ feature 'Author can delete answer', %q{
 
       expect(page).to have_content 'Answer was destroyed'
       expect(page).to have_current_path question_path(question)
+      expect(page).not_to have_content(answer.body)
     end
   end
 end
