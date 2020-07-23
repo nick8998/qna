@@ -12,11 +12,9 @@ feature 'Author can delete question', %q{
       given!(:question) { create(:question) } 
 
       scenario  "can't destroy answer" do
-        sign_in(user1)
-        click_on('Show', match: :first)
-        click_on 'Destroy question'
-        expect(page).to have_content "You can't destroy question"
-        expect(page).to have_current_path questions_path
+        sign_in(user)
+        visit question_path(question)
+        expect(page).not_to have_content "Destroy question"
       end
     end
 

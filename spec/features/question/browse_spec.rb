@@ -14,7 +14,8 @@ feature 'User can browse questions', %q{
       visit questions_path
       expect(page).to have_content 'TitleBody'
       questions.each do |q|
-        expect(page).to have_content "#{q.title}#{q.body}"
+        expect(page).to have_content q.title
+        expect(page).to have_content q.body
       end
     end
 
@@ -22,7 +23,8 @@ feature 'User can browse questions', %q{
       visit questions_path
       expect(page).to have_content 'TitleBody'
       questions.each do |q|
-        expect(page).to have_content "#{q.title}#{q.body}"
+        expect(page).to have_content q.title
+        expect(page).to have_content q.body
       end
     end
 end

@@ -15,7 +15,7 @@ feature 'User can browse answers', %q{
       visit question_path(question)
       expect(page).to have_content 'Body'
       answers.each do |a|
-        expect(page).to have_content "#{a.body}"
+        expect(page).to have_content a.body
       end
     end
 
@@ -23,7 +23,7 @@ feature 'User can browse answers', %q{
       visit question_path(question)
       expect(page).to have_content 'Body'
       answers.each do |a|
-        expect(page).to have_content "#{a.body}"
+        expect(page).to have_content a.body
       end
     end
 end
