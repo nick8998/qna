@@ -1,42 +1,43 @@
 class AnswersController < ApplicationController
 
-  before_action :load_answer, only: %i[show edit update destroy]
-  before_action :find_question, only: %i[new create]
-
-  def show;  end
-
-  def new
-    @answer = @question.answers.new
-  end
+  before_action :authenticate_user!
+  before_action :find_answer, only: %i[edit update destroy]
+  before_action :find_question, only: %i[create]
 
   def edit;  end
 
   def create
     @answer = @question.answers.new(answer_params)
-
+    @answer.author = current_user
     if @answer.save
-      redirect_to @answer
+      redirect_to @answer.question, notice: "Your answer successfully created."
     else 
-     render :new
+      render "questions/show"
     end
   end
 
   def update
     if @answer.update(answer_params)
-      redirect_to @answer
+      redirect_to @answer.question
     else
       render :edit
     end
   end
 
   def destroy
-    @answer.destroy
-    redirect_to question_path(@answer.question)
+    if current_user.author_of?(@answer)
+      @answer.destroy
+      flash[:notice] = "Answer was destroyed"
+    else
+      flash[:alert] = "You can't destroy answer"
+    end
+
+    redirect_to @answer.question
   end
 
   private 
 
-  def load_answer
+  def find_answer
     @answer = Answer.find(params[:id])
   end
 
