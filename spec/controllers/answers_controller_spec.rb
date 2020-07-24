@@ -89,7 +89,6 @@ RSpec.describe AnswersController, type: :controller do
       context 'Author' do
         before { login(user) }
         let!(:answer) { create(:answer, question: question, author: user) }
-        let!(:answer) { create(:answer, question: question, author: user) }
 
         it 'deletes the answer' do
           expect { delete :destroy, params: { id: answer } }.to change(user.authored_answers, :count).by(-1)

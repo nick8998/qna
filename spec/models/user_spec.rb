@@ -7,24 +7,17 @@ RSpec.describe User, type: :model do
   describe '#author_of?' do
     let(:user) { create(:user) }
     let!(:question) { create(:question, author: user) }
-    let!(:answer) { create(:answer, author: user, question: question) }
     
     context 'Valid' do
-      it 'checks author_id for question' do
-        expect(user.author_of?(question)).to eq(true)
-      end
-      it 'checks author_id for answer' do
-        expect(user.author_of?(answer)).to eq(true)
+      it 'checks author_id' do
+        expect(user).to be_author_of(question)
       end
     end
 
     context 'Invalid' do
     let(:user1) { create(:user) }
-      it 'checks author_id for question' do
-        expect(user1.author_of?(question)).to eq(false)
-      end
-      it 'checks author_id for answer' do
-        expect(user1.author_of?(answer)).to eq(false)
+      it 'checks author_id' do
+        expect(user1).not_to be_author_of(question)
       end
     end
   end
