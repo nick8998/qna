@@ -7,18 +7,6 @@ RSpec.describe AnswersController, type: :controller do
     let(:question) { create(:question) }
     let(:answer) { create(:answer, question: question, author: user) }
 
-    describe 'GET #edit' do
-      before { login(user) }
-      before { get :edit, params: { id: answer.id } }
-
-      it 'assigns the requested answer to @answer' do
-        expect(assigns(:answer)).to eq answer
-      end
-
-      it 'render edit view' do
-        expect(response).to render_template :edit
-      end
-    end
 
     describe 'POST #create' do
       before { login(user) }
@@ -26,26 +14,26 @@ RSpec.describe AnswersController, type: :controller do
       context 'with valid attributes' do
         it 'save a new answer in the database' do
           question = create(:question)
-          expect { post :create, params: { answer: attributes_for(:answer), question_id: question.id, author_id: user.id } }.to change(question.answers, :count).by(1)
-          expect { post :create, params: { answer: attributes_for(:answer), question_id: question.id, author_id: user.id } }.to change(user.authored_answers, :count).by(1)
+          expect { post :create, params: { answer: attributes_for(:answer), question_id: question.id, author_id: user.id }, format: :js }.to change(question.answers, :count).by(1)
+          expect { post :create, params: { answer: attributes_for(:answer), question_id: question.id, author_id: user.id }, format: :js }.to change(user.authored_answers, :count).by(1)
         end
 
         it 'redirects to question' do
-          post :create, params: { answer: attributes_for(:answer), question_id: question.id, author_id: user.id }
+          post :create, params: { answer: attributes_for(:answer), question_id: question.id, author_id: user.id, format: :js }
 
-          expect(response).to redirect_to question_path(question)
+          expect(response).to render_template :create
         end
       end
 
       context 'with invalid attributes' do
         it 'does not save the answer' do
-          expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, author_id: user.id }}.to_not change(Answer, :count)
+          expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, author_id: user.id }, format: :js}.to_not change(Answer, :count)
         end
 
         it 'redirects to question' do
-          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, author_id: user.id }
+          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, author_id: user.id }, format: :js
 
-          expect(response).to render_template "questions/show"
+          expect(response).to render_template :create
           expect(assigns(:answer)).not_to eq answer
         end
       end
@@ -55,32 +43,32 @@ RSpec.describe AnswersController, type: :controller do
       before { login(user) }
       context 'with valid attributes' do
         it 'assigns the requested answer to @answer' do
-          patch :update, params: { id: answer,  answer: attributes_for(:answer) }
+          patch :update, params: { id: answer,  answer: attributes_for(:answer) }, format: :js
           expect(assigns(:answer)).to eq answer
         end
 
         it 'changes answer attributes' do
-          patch :update, params: { id: answer,  answer: { body: 'new body' } } 
+          patch :update, params: { id: answer,  answer: { body: 'new body' } }, format: :js
           answer.reload
 
           expect(answer.body).to eq 'new body'
         end
 
-        it 'redirects to update answers' do
-          patch :update, params: { id: answer,  answer: attributes_for(:answer)  }
+        it 'renders update view' do
+          patch :update, params: { id: answer,  answer: attributes_for(:answer)  }, format: :js
 
-          expect(response).to redirect_to answer.question
+          expect(response).to render_template :update
         end
       end
 
       context 'with invalid attributes' do
-        before { patch :update, params: { id: answer,  answer: attributes_for(:answer, :invalid)  } }
+        before { patch :update, params: { id: answer,  answer: attributes_for(:answer, :invalid), format: :js  } }
         it 'does not change answer' do
           expect(answer.body).to eq answer.body
         end
 
         it 're-renders edit view' do
-          expect(response).to render_template :edit
+          expect(response).to render_template :update
         end
       end
     end
@@ -117,18 +105,6 @@ RSpec.describe AnswersController, type: :controller do
     let(:user) { create(:user) }
     let(:question) { create(:question, author: user) }
     let(:answer) { create(:answer, question: question, author: user) }
-
-    describe 'GET #edit' do
-      before { get :edit, params: { id: answer, question_id: question,  author_id: user.id }  }
-      it 'does not assigns the requested answer to @answer' do
-        expect(assigns(:answer)).not_to eq answer
-        expect(response).to redirect_to new_user_session_path
-      end
-
-      it "does not render edit view" do
-        expect(response).not_to render_template :edit
-      end
-    end
 
     describe 'POST #create' do
       it 'does not save a new answer in the database' do

@@ -3,20 +3,13 @@ p class="q-body"= @question.body
 -if current_user&.author_of?(@question)
   p= link_to 'Destroy question', question_path(@question), method: :delete
 
-table
-  tr
-    th= "Body"
-    th= "Action"
-  -@question.answers.each do |a|
-    -if a.persisted?
-      tr
-        td class="a-body" = a.body
-        -if current_user&.author_of?(a)
-          td= link_to 'Destroy answer', answer_path(a), method: :delete
-        
 
-= form_with model: [@question, @answer], local: true do |f|
+.answers
+  = render @question.answers
+        
+.answer-errors
   = render 'shared/errors', resource: @answer
+= form_with model: [@question, @answer], class: 'new-answer' do |f|
   = f.label :body
   = f.text_area :body
   = f.submit 'To answer'

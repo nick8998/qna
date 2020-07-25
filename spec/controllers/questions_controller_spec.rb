@@ -36,10 +36,6 @@ RSpec.describe QuestionsController, type: :controller do
       it 'checks the class of @answer' do
         expect(assigns(:answer)).to be_a_new Answer
       end
-
-      it 'checks association with new answer' do
-        expect(assigns(:answer).question).to eq question
-      end
     end
 
     describe 'GET #new' do
