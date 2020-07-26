@@ -2,8 +2,8 @@ table
   tr
     td class="a-body" = answer.body
     -if current_user&.author_of?(answer)
-      td= link_to 'Destroy answer', answer_path(answer), method: :delete
-      td= link_to 'Edit', answer_path(answer), class: 'edit-answer-link', data: { answer_id: answer.id }
+      td= link_to 'Destroy answer', answer, class: 'destroy-answer', data: { confirm: 'Are you sure?' }, method: :delete, :remote => true
+      td= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
 
 = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
   = f.label :body, 'Your answer'

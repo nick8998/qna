@@ -1,0 +1,4 @@
+$('.destroy-answer').bind('ajax:success', function() {     
+  $(this).closest('tr').fadeOut();
+  $('.answers').html('<%= j render @question.answers %>');
+});
