@@ -5,4 +5,7 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true 
 
+  def best_answers?
+    self.answers.where(best: true).count == 1
+  end
 end

@@ -3,6 +3,7 @@ p class="q-body"= @question.body
 
 -if current_user&.author_of?(@question)
     p= link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: @question.id }
+    p= link_to 'Destroy question', question_path(@question), method: :delete
 
 = form_with model: @question, class: 'hidden', html: { id: "edit-question-#{@question.id}" } do |f|
   = f.label :title, 'Your question title'

@@ -15,7 +15,7 @@ class AnswersController < ApplicationController
 
   def update_best
     @question = @answer.question
-    if @question.answers.where(best: true).count == 1
+    if @question.best_answers?
       @question.answers.where(best: true).update(best: false)
     end    
     @answer.update!(best: true)

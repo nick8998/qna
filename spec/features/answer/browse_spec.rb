@@ -26,4 +26,13 @@ feature 'User can browse answers', %q{
         expect(page).to have_content a.body
       end
     end
+
+    given!(:answer) { create(:answer, question: question, best: true) }
+    scenario 'Best answer is first in the list' do
+      visit question_path(question)
+      within '.best-answer' do
+        expect(page).to have_content 'Best answer'
+        expect(page).to have_content answer.body        
+      end
+    end
 end

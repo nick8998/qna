@@ -32,9 +32,9 @@ feature 'Author can delete answer', %q{
     end
 
     scenario 'can destroy answer' do
-      click_on 'Destroy answer'
-
-      expect(page).to have_content 'Answer was destroyed'
+      accept_alert do
+        click_on 'Destroy answer'
+      end
       expect(page).to have_current_path question_path(question)
       expect(page).not_to have_content(answer.body)
     end

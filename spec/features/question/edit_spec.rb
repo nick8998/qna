@@ -16,18 +16,33 @@ feature 'Author can edit his question', %q{
   end
 
   describe 'Not author', js: true do
-      scenario  "can't destroy question" do
+      scenario  "can't edit question" do
         sign_in(user1)
         visit question_path(question)
         expect(page).to_not have_link 'Edit'
+      end
+      scenario 'can choose best answer' do
+        expect(page).to_not have_link 'Best'
       end
     end
 
   describe 'Author', js: true do
     given!(:question1) { create(:question, author: user1) }
+    given!(:answer) { create(:answer, question: question) }
+
     background do
       sign_in(user)
       visit question_path(question)
+    end
+
+    scenario 'can choose best answer' do
+      click_on 'Best'
+
+      within '.best-answer' do
+        expect(page).to have_content 'Best answer'
+        expect(page).to have_content answer.body        
+      end
+
     end
 
     scenario 'edits his question' do

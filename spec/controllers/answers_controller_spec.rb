@@ -39,7 +39,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    describe 'PACH #update' do
+    describe 'PATCH #update' do
       before { login(user) }
       context 'with valid attributes' do
         it 'assigns the requested answer to @answer' do
@@ -71,6 +71,20 @@ RSpec.describe AnswersController, type: :controller do
           expect(response).to render_template :update
         end
       end
+    end
+
+    describe 'PATCH #update_best' do
+      before { login(user) }
+        it 'assigns the requested answer to @answer' do
+          patch :update_best, params: { id: answer,  answer: attributes_for(:answer) }, format: :js
+          expect(assigns(:answer).best).to eq true
+        end
+
+        it 'renders update view' do
+          patch :update, params: { id: answer,  answer: attributes_for(:answer)  }, format: :js
+
+          expect(response).to render_template :update
+        end
     end
 
     describe 'DELETE #destroy' do
@@ -113,7 +127,7 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    describe 'POST #update' do
+    describe 'PATCH #update' do
       it 'does not assign the requested answer to @answer' do
         patch :update, params: { id: answer,  answer: attributes_for(:answer) }
         expect(assigns(:answer)).not_to eq answer
@@ -121,14 +135,24 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
+    describe 'PATCH #update_best' do
+      it 'does not assigns the requested answer to @answer' do
+        patch :update_best, params: { id: answer,  answer: attributes_for(:answer) }
+        expect(assigns(:answer)).not_to eq answer
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
     describe 'DELETE #destroy' do
-      let!(:answer) { create(:question) }
+      let!(:answer) { create(:answer, question: question, author: user) }
 
       it "does not delete the answer" do
         expect { delete :destroy, params: { id: answer } }.not_to change(Answer, :count)
         expect(response).to redirect_to new_user_session_path
       end
     end
+
+
   end
 end
 end
