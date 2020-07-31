@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[index show]
-  before_action :find_question, only: %i[show edit update destroy]
+  before_action :find_question, only: %i[show edit update destroy update_best]
 
   def index
     @questions = Question.all
@@ -9,6 +9,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
+    @best_answer = @question.answers.where(best: true).first
   end
 
   def new
@@ -38,7 +39,6 @@ class QuestionsController < ApplicationController
     else
       redirect_to questions_path, alert: "You can't destroy question"
     end
-
   end
 
   private

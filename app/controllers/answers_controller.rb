@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :find_answer, only: %i[destroy update]
+  before_action :find_answer, only: %i[destroy update update_best]
   before_action :find_question, only: %i[create]
 
   def create
@@ -11,6 +11,14 @@ class AnswersController < ApplicationController
   def update
     @answer.update(answer_params)
     @question = @answer.question
+  end
+
+  def update_best
+    @question = @answer.question
+    if @question.answers.where(best: true).count == 1
+      @question.answers.where(best: true).update(best: false)
+    end    
+    @answer.update!(best: true)
   end
 
   def destroy

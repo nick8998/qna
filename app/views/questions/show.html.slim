@@ -3,7 +3,10 @@
 
 .question
   =render "form"
-  
+
+.best-answer
+  = render "answers/best_answer", answer: @best_answer
+
 .answers
   = render @question.answers
         

@@ -1,0 +1,5 @@
+$('.best-answer-link').bind('ajax:success', function() { 
+  $('.best-answer').html('<%= j render "best_answer", answer: @answer %>')
+  $(this).closest('tr').fadeOut();
+  $('.answers').html('<%= j render @question.answers %>');
+});
