@@ -34,17 +34,6 @@ feature 'Author can edit his question', %q{
       sign_in(user)
       visit question_path(question)
     end
-
-    scenario 'can choose best answer' do
-      click_on 'Best'
-
-      within '.best-answer' do
-        expect(page).to have_content 'Best answer'
-        expect(page).to have_content answer.body        
-      end
-
-    end
-
     scenario 'edits his question' do
           click_on 'Edit'
           within '.question' do
@@ -60,7 +49,7 @@ feature 'Author can edit his question', %q{
           expect(page).to have_current_path question_path(question)
         end
 
-    scenario 'edits his answer with errors' do
+    scenario 'edits his question with errors' do
       click_on 'Edit'
 
           within '.question' do

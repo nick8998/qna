@@ -1,8 +1,0 @@
--if !answer.nil?
-  h2= "Best answer "
-  p= answer.body
-
-  -if current_user&.author_of?(answer)
-    p
-      = link_to 'Destroy answer | ', answer, class: 'destroy-answer', data: { confirm: 'Are you sure?' }, method: :delete, :remote => true
-      = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }

@@ -1,9 +1,8 @@
 table
   tr
-  -if !answer.best
     td class="a-body" data = {answer_id: answer.id} = answer.body
-    -if current_user.author_of?(answer.question)
-      td= link_to 'Best', update_best_answer_path(answer), class: 'best-answer-link', data: { answer_id: answer.id }, method: :patch, :remote => true
+    -if current_user&.author_of?(answer.question) && answer.best == false
+      td= link_to 'Best', answer_update_best_path(answer), class: 'best-answer-link', data: { answer_id: answer.id }, method: :patch, :remote => true
     -if current_user&.author_of?(answer)
       td= link_to 'Destroy answer', answer, class: 'destroy-answer', data: { confirm: 'Are you sure?' }, method: :delete, :remote => true
       td= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }

@@ -2,13 +2,10 @@
   = render 'shared/errors', resource: @question
 
 .question
-  =render "form"
-
-.best-answer
-  = render "answers/best_answer", answer: @best_answer
+  =render @question
 
 .answers
-  = render @question.answers
+  = render @question.answers.best_answer_first(@question)
         
 .answer-errors
   = render 'shared/errors', resource: @answer
