@@ -13,13 +13,13 @@ RSpec.describe Answer, type: :model do
     
     context 'Valid' do
       it 'checks best with one answer' do
-        answer1.choose_best(question)
+        answer1.choose_best
         expect(answer1.best).to be true
       end
 
       let!(:answer2) { create(:answer, question: question, best: false) }
       it 'checks best with some answers' do
-        answer2.choose_best(question)
+        answer2.choose_best
         expect(answer2.best).to be true
         expect(answer1.best).to be false
       end
@@ -28,7 +28,7 @@ RSpec.describe Answer, type: :model do
     context 'Invalid' do
       let!(:answer1) { create(:answer, question: question, best: true) }
       it 'checks best' do
-        answer1.choose_best(question)
+        answer1.choose_best
         expect(answer1.best).to be true 
       end
     end

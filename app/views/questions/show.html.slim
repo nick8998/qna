@@ -5,7 +5,7 @@
   =render @question
 
 .answers
-  = render @question.answers.best_answer_first(@question)
+  = render Answer.best_answer_first(@question)
         
 .answer-errors
   = render 'shared/errors', resource: @answer

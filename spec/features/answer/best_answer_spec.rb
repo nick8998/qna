@@ -9,6 +9,7 @@ feature 'User can browse answers', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question, author: user) }
   given!(:answer) { create(:answer, question: question) }
+  
   given(:user1) { create(:user) }
     
     scenario "Unauthenticated user can't choose best answer" do
@@ -27,6 +28,13 @@ feature 'User can browse answers', %q{
       sign_in(user)
       visit question_path(question)
       click_on "Best"
-      expect(page).not_to have_link "Best"
+      expect(page).to have_css(".a-best-body")
+      expect(page).to have_link("Best", count: 1)
+    end
+
+    given!(:answer2) { create(:answer, question: question, best: true) }
+    scenario "Best answer is first", js: true do
+      visit question_path(question)
+      expect(page).to have_css(".a-best-body") 
     end
 end

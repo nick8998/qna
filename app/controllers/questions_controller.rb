@@ -9,7 +9,6 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
-    @best_answer = @question.answers.where(best: true).first
   end
 
   def new
@@ -30,7 +29,10 @@ class QuestionsController < ApplicationController
 
   def update
     if current_user.author_of?(@question)
-      @question.update(question_params) 
+      @question.update(question_params)
+      flash[:notice] = "Your question was updated"
+    else
+      flash[:alert] = "You can't update question" 
     end
   end
 

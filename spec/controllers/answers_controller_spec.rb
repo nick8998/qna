@@ -76,12 +76,12 @@ RSpec.describe AnswersController, type: :controller do
     describe 'PATCH #update_best' do
       before { login(user) }
         it 'assigns the requested answer to @answer' do
-          patch :update_best, params: { answer_id: answer.id }, format: :js
+          patch :update_best, params: { id: answer,  answer: attributes_for(:answer) }, format: :js
           expect(assigns(:answer)).to eq answer
         end
 
         it 'renders update view' do
-          patch :update_best, params: { answer_id: answer.id  }, format: :js
+          patch :update_best, params: { id: answer,  answer: attributes_for(:answer)  }, format: :js
 
           expect(response).to render_template :update_best
         end
@@ -137,7 +137,7 @@ RSpec.describe AnswersController, type: :controller do
 
     describe 'PATCH #update_best' do
       it 'does not assigns the requested answer to @answer' do
-        patch :update_best, params: { answer_id: answer.id,  answer: attributes_for(:answer) }
+        patch :update_best, params: { id: answer,  answer: attributes_for(:answer) }
         expect(assigns(:answer)).not_to eq answer
         expect(response).to redirect_to new_user_session_path
       end
