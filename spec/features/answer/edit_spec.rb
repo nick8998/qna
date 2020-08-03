@@ -45,6 +45,7 @@ feature 'User can edit his answer', %q{
             expect(page).to have_content 'edited answer'
             expect(page).to_not have_selector 'textarea'         
           end
+          expect(page).to have_content "You answer was updated"
           expect(page).to have_current_path question_path(question)
         end
 
@@ -58,11 +59,6 @@ feature 'User can edit his answer', %q{
           end
           expect(page).to have_content "Body can't be blank"
           expect(page).to have_current_path question_path(question)
-    end
-
-    scenario "tries to edit other user's answer" do
-      expect(page).to have_link('Edit', count: 1)
-      expect(page).to have_current_path question_path(question)
     end
   end    
 end

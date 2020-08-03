@@ -41,33 +41,48 @@ RSpec.describe AnswersController, type: :controller do
 
     describe 'PATCH #update' do
       before { login(user) }
-      context 'with valid attributes' do
-        it 'assigns the requested answer to @answer' do
-          patch :update, params: { id: answer,  answer: attributes_for(:answer) }, format: :js
-          expect(assigns(:answer)).to eq answer
+      context 'Author' do
+        context 'with valid attributes' do
+          it 'assigns the requested answer to @answer' do
+            patch :update, params: { id: answer,  answer: attributes_for(:answer) }, format: :js
+            expect(assigns(:answer)).to eq answer
+          end
+
+          it 'changes answer attributes' do
+            patch :update, params: { id: answer,  answer: { body: 'new body' } }, format: :js
+            answer.reload
+
+            expect(answer.body).to eq 'new body'
+          end
+
+          it 'renders update view' do
+            patch :update, params: { id: answer,  answer: attributes_for(:answer)  }, format: :js
+
+            expect(response).to render_template :update
+          end
         end
 
-        it 'changes answer attributes' do
-          patch :update, params: { id: answer,  answer: { body: 'new body' } }, format: :js
-          answer.reload
+        context 'with invalid attributes' do
+          before { patch :update, params: { id: answer,  answer: attributes_for(:answer, :invalid), format: :js  } }
+          it 'does not change answer' do
+            expect(answer.body).to eq answer.body
+          end
 
-          expect(answer.body).to eq 'new body'
-        end
-
-        it 'renders update view' do
-          patch :update, params: { id: answer,  answer: attributes_for(:answer)  }, format: :js
-
-          expect(response).to render_template :update
+          it 're-renders edit view' do
+            expect(response).to render_template :update
+          end
         end
       end
-
-      context 'with invalid attributes' do
-        before { patch :update, params: { id: answer,  answer: attributes_for(:answer, :invalid), format: :js  } }
-        it 'does not change answer' do
-          expect(answer.body).to eq answer.body
+      context "Not author" do
+        let(:user1) { create(:user) }
+        before { login(user1) }
+        let!(:answer) { create(:answer, question: question, author: user) }
+        it 'updates the answer' do
+          patch :update, params: { id: answer,  answer: { body: "new body" }, format: :js  }
+          expect(answer.body).not_to eq "new body"
         end
-
-        it 're-renders edit view' do
+        it 'redirect to question show view' do
+          patch :update, params: { id: answer,  answer: { body: "new body" }, format: :js  }
           expect(response).to render_template :update
         end
       end
@@ -75,6 +90,7 @@ RSpec.describe AnswersController, type: :controller do
 
     describe 'PATCH #update_best' do
       before { login(user) }
+      context 'Author' do
         it 'assigns the requested answer to @answer' do
           patch :update_best, params: { id: answer,  answer: attributes_for(:answer) }, format: :js
           expect(assigns(:answer)).to eq answer
@@ -85,6 +101,21 @@ RSpec.describe AnswersController, type: :controller do
 
           expect(response).to render_template :update_best
         end
+      end
+
+        context "Not author" do
+          let(:user1) { create(:user) }
+          before { login(user1) }
+          let!(:answer) { create(:answer, question: question, author: user) }
+          it 'updates to best answer' do
+            patch :update_best, params: { id: answer,  answer: attributes_for(:answer) }, format: :js
+            expect(answer.best).to eq false
+          end
+          it 'redirect to question show view' do
+            patch :update_best, params: { id: answer,  answer: attributes_for(:answer) }, format: :js
+            expect(response).to render_template :update_best
+          end
+      end
     end
 
     describe 'DELETE #destroy' do
@@ -105,7 +136,7 @@ RSpec.describe AnswersController, type: :controller do
         let(:user1) { create(:user) }
         before { login(user1) }
         let!(:answer) { create(:answer, question: question, author: user) }
-        it '(not author) deletes the answer' do
+        it 'deletes the answer' do
           expect { delete :destroy, params: { id: answer }, format: :js }.not_to change(Answer, :count)
         end
         it 'redirect to question show view' do

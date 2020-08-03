@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-feature 'User can browse answers', %q{
+feature 'User can choose best answer', %q{
   In order to get answer from a community
-  As an authenticated user
-  I'd like to be able to ask the question
+  As an author of question
+  I'd like to be able to choose best answer for my question
 } do
 
   given(:user) { create(:user) }
@@ -27,14 +27,20 @@ feature 'User can browse answers', %q{
     scenario "Author can choose best answer", js: true do
       sign_in(user)
       visit question_path(question)
-      click_on "Best"
+      click_on "Best", match: :first
       expect(page).to have_css(".a-best-body")
       expect(page).to have_link("Best", count: 1)
+      expect(page).to have_content "This answer is best"
     end
 
-    given!(:answer2) { create(:answer, question: question, best: true) }
+    given!(:answer2) { create(:answer, body: "text text", question: question) }
     scenario "Best answer is first", js: true do
+      sign_in(user)
       visit question_path(question)
-      expect(page).to have_css(".a-best-body") 
+      all('td', text: 'Best')[1].click
+      within '.a-best-body' do
+        expect(page).to have_content "text text"
+      end
+      expect(page).to have_content "This answer is best"
     end
 end

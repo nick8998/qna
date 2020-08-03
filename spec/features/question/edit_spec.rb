@@ -46,6 +46,7 @@ feature 'Author can edit his question', %q{
           end
           expect(page).to have_content 'edited question title'
           expect(page).to have_content 'edited question body'
+          expect(page).to have_content "Your question was updated"
           expect(page).to have_current_path question_path(question)
         end
 

@@ -1,12 +1,16 @@
 .question-errors
   = render 'shared/errors', resource: @question
 
+.question-flash
+
 .question
   =render @question
 
+.answer-flash
+
 .answers
-  = render Answer.best_answer_first(@question)
-        
+  = render @question.answers.best_answer_first
+
 .answer-errors
   = render 'shared/errors', resource: @answer
 = form_with model: [@question, @answer], class: 'new-answer' do |f|

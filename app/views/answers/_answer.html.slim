@@ -2,6 +2,9 @@ table
   tr
     -if answer.best?
       td class="a-best-body" style = "color: red" data = {answer_id: answer.id} = answer.body
+      -if current_user&.author_of?(answer)
+        td= link_to 'Destroy answer', answer, class: 'destroy-answer', data: { confirm: 'Are you sure?' }, method: :delete, :remote => true
+        td= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
     -else
       td class="a-body" data = {answer_id: answer.id} = answer.body
       -if current_user&.author_of?(answer.question) && !answer.best?

@@ -37,6 +37,7 @@ feature 'Author can delete answer', %q{
       end
       expect(page).to have_current_path question_path(question)
       expect(page).not_to have_content(answer.body)
+      expect(page).to have_content "Answer was deleted"
     end
   end
 end
