@@ -96,7 +96,7 @@ RSpec.describe AnswersController, type: :controller do
         it 'assigns the requested answer to @answer' do
           patch :update_best, params: { id: answer1 }, format: :js
           
-          expect(answer1.best).to eq true
+          expect(answer1.reload.best).to eq true
         end
 
         it 'renders update view' do
@@ -111,7 +111,7 @@ RSpec.describe AnswersController, type: :controller do
           before { login(user1) }
           it 'updates to best answer' do
             patch :update_best, params: { id: answer }, format: :js
-            expect(answer.best).to eq false
+            expect(answer.reload.best).to eq false
           end
           it 'redirect to question show view' do
             patch :update_best, params: { id: answer,  answer: attributes_for(:answer) }, format: :js
