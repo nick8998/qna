@@ -1,22 +1,19 @@
-h1 class="q-title"= @question.title
-p class="q-body"= @question.body
--if current_user&.author_of?(@question)
-  p= link_to 'Destroy question', question_path(@question), method: :delete
+.question-errors
+  = render 'shared/errors', resource: @question
 
-table
-  tr
-    th= "Body"
-    th= "Action"
-  -@question.answers.each do |a|
-    -if a.persisted?
-      tr
-        td class="a-body" = a.body
-        -if current_user&.author_of?(a)
-          td= link_to 'Destroy answer', answer_path(a), method: :delete
-        
+.question-flash
 
-= form_with model: [@question, @answer], local: true do |f|
+.question
+  =render @question
+
+.answer-flash
+
+.answers
+  = render @question.answers.best_answer_first
+
+.answer-errors
   = render 'shared/errors', resource: @answer
+= form_with model: [@question, @answer], class: 'new-answer' do |f|
   = f.label :body
   = f.text_area :body
   = f.submit 'To answer'

@@ -8,7 +8,13 @@ feature 'Author can delete answer', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question) }
 
-    describe 'Not author' do
+    scenario 'Unauthenticated can not edit answer' do
+      visit question_path(question)
+
+      expect(page).to_not have_link 'Edit'
+    end
+
+    describe 'Not author', js: true do
       given!(:answer) { create(:answer, question: question) } 
 
       scenario  "can't destroy answer" do
@@ -18,19 +24,20 @@ feature 'Author can delete answer', %q{
       end
     end
 
-  describe 'Author' do
+  describe 'Author', js: true do
     given!(:answer) { create(:answer, question: question, author: user) }
     background do
       sign_in(user)
       visit question_path(question)
     end
 
-    scenario 'can destroy question' do
-      click_on 'Destroy answer'
-
-      expect(page).to have_content 'Answer was destroyed'
+    scenario 'can destroy answer' do
+      accept_alert do
+        click_on 'Destroy answer'
+      end
       expect(page).to have_current_path question_path(question)
       expect(page).not_to have_content(answer.body)
+      expect(page).to have_content "Answer was deleted"
     end
   end
 end

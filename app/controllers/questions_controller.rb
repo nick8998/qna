@@ -1,14 +1,14 @@
 class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: %i[index show]
-  before_action :find_question, only: %i[show edit update destroy]
+  before_action :find_question, only: %i[show edit update destroy update_best]
 
   def index
     @questions = Question.all
   end
 
   def show
-    @answer = @question.answers.new
+    @answer = Answer.new
   end
 
   def new
@@ -28,10 +28,11 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question
+    if current_user.author_of?(@question)
+      @question.update(question_params)
+      flash[:notice] = "Your question was updated"
     else
-      render :edit
+      flash[:alert] = "You can't update question" 
     end
   end
 
@@ -42,7 +43,6 @@ class QuestionsController < ApplicationController
     else
       redirect_to questions_path, alert: "You can't destroy question"
     end
-
   end
 
   private

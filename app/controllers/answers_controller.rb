@@ -1,38 +1,41 @@
 class AnswersController < ApplicationController
-
   before_action :authenticate_user!
-  before_action :find_answer, only: %i[edit update destroy]
+  before_action :find_answer, only: %i[destroy update update_best]
   before_action :find_question, only: %i[create]
 
-  def edit;  end
-
   def create
-    @answer = @question.answers.new(answer_params)
-    @answer.author = current_user
-    if @answer.save
-      redirect_to @answer.question, notice: "Your answer successfully created."
-    else 
-      render "questions/show"
-    end
+    @answer = @question.answers.create(answer_params)
+    @answer.update(author_id: current_user.id)
   end
 
   def update
-    if @answer.update(answer_params)
-      redirect_to @answer.question
+    if current_user.author_of?(@answer)
+      @answer.update(answer_params)
+      @question = @answer.question
+      flash[:notice] = "You answer was updated"
     else
-      render :edit
+      flash[:alert] = "You can't update answer"
+    end
+  end
+
+  def update_best 
+    @question = @answer.question 
+    if current_user.author_of?(@question)
+      @answer.choose_best
+      flash[:notice] = "This answer is best"
+    else
+      flash[:alert] = "You can't choose best answer"
     end
   end
 
   def destroy
     if current_user.author_of?(@answer)
+      @question = @answer.question
       @answer.destroy
-      flash[:notice] = "Answer was destroyed"
+      flash[:notice] = "Answer was deleted"
     else
-      flash[:alert] = "You can't destroy answer"
+      flash[:alert] = "You can't delete answer"
     end
-
-    redirect_to @answer.question
   end
 
   private 

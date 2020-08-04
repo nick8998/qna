@@ -1,0 +1,5 @@
+$('.destroy-answer').bind('ajax:success', function() {     
+  $(this).closest('tr').fadeOut();
+  $('.answers').html('<%= j render @question.answers %>');
+  $('.answer-flash').html("<%= j render 'shared/flash' %>");
+});
