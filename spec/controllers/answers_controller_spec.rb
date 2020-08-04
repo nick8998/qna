@@ -89,15 +89,18 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     describe 'PATCH #update_best' do
-      before { login(user) }
       context 'Author' do
+        before { login(user) }
+        let!(:question1) { create(:question, author: user) }
+        let!(:answer1) { create(:answer, question: question1) }
         it 'assigns the requested answer to @answer' do
-          patch :update_best, params: { id: answer,  answer: attributes_for(:answer) }, format: :js
-          expect(assigns(:answer)).to eq answer
+          patch :update_best, params: { id: answer1 }, format: :js
+          
+          expect(answer1.best).to eq true
         end
 
         it 'renders update view' do
-          patch :update_best, params: { id: answer,  answer: attributes_for(:answer)  }, format: :js
+          patch :update_best, params: { id: answer1 }, format: :js
 
           expect(response).to render_template :update_best
         end
@@ -106,9 +109,8 @@ RSpec.describe AnswersController, type: :controller do
         context "Not author" do
           let(:user1) { create(:user) }
           before { login(user1) }
-          let!(:answer) { create(:answer, question: question, author: user) }
           it 'updates to best answer' do
-            patch :update_best, params: { id: answer,  answer: attributes_for(:answer) }, format: :js
+            patch :update_best, params: { id: answer }, format: :js
             expect(answer.best).to eq false
           end
           it 'redirect to question show view' do
