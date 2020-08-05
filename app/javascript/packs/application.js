@@ -10,6 +10,7 @@ require("channels")
 require("jquery")
 require("answer")
 require("question")
+require("direct_uploads")
 
 
 // Uncomment to copy all static images under ../images to the output folder and reference
