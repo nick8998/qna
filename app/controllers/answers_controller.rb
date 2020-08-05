@@ -28,6 +28,12 @@ class AnswersController < ApplicationController
     end
   end
 
+  def delete_file
+    @file = ActiveStorage::Attachment.find(params[:id])
+    @answer = @file.record
+    @file.purge
+  end
+
   def destroy
     if current_user.author_of?(@answer)
       @question = @answer.question
@@ -49,6 +55,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body)    
+    params.require(:answer).permit(:body, files: [])    
   end
 end

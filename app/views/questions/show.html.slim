@@ -6,9 +6,6 @@
 .question
   =render @question
 
--if @question.files.attached?
-  -@question.files.each do |file|
-    p= link_to file.filename.to_s, url_for(file)
 .answer-flash
 
 .answers
@@ -17,7 +14,11 @@
 .answer-errors
   = render 'shared/errors', resource: @answer
 = form_with model: [@question, @answer], class: 'new-answer' do |f|
-  = f.label :body
-  = f.text_area :body
-  = f.submit 'To answer'
+  p
+    = f.label :body
+    = f.text_area :body
+  p
+    = f.label :files
+    = f.file_field :files, multiple: true
+  p= f.submit 'To answer'
 
