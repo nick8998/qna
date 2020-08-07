@@ -13,13 +13,13 @@ RSpec.describe AttachmentsController, type: :controller do
       it 'deletes file from question' do
         question.files.attach(create_file_blob)
         question.files.attach(create_file_blob(filename: "image1.jpg"))
-        expect{ delete :delete_file, params: { attachment_id: 1 }, format: :js }.to change(question.files, :count).by(-1)
+        expect{ delete :destroy, params: { id: 1 }, format: :js }.to change(question.files, :count).by(-1)
       end
 
       it 'deletes file from answer' do
         answer.files.attach(create_file_blob)
         answer.files.attach(create_file_blob(filename: "image1.jpg"))
-        expect{ delete :delete_file, params: { attachment_id: 1 }, format: :js }.to change(answer.files, :count).by(-1)
+        expect{ delete :destroy, params: { id: 1 }, format: :js }.to change(answer.files, :count).by(-1)
       end
     end
     context 'Not author' do
@@ -33,13 +33,13 @@ RSpec.describe AttachmentsController, type: :controller do
       it 'deletes file from question' do
         question.files.attach(create_file_blob)
         question.files.attach(create_file_blob(filename: "image1.jpg"))
-        expect{ delete :delete_file, params: { attachment_id: 1 }, format: :js }.not_to change(question.files, :count)
+        expect{ delete :destroy, params: { id: 1 }, format: :js }.not_to change(question.files, :count)
       end
 
       it 'deletes file from answer' do
         answer.files.attach(create_file_blob)
         answer.files.attach(create_file_blob(filename: "image1.jpg"))
-        expect{ delete :delete_file, params: { attachment_id: 1 }, format: :js }.not_to change(answer.files, :count)
+        expect{ delete :destroy, params: { id: 1 }, format: :js }.not_to change(answer.files, :count)
       end
     end
   end

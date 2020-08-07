@@ -9,7 +9,5 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :attachments , only: %i[] do
-    delete :delete_file
-  end
+  resources :attachments , only: %i[destroy]
 end
