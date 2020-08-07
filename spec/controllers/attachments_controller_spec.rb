@@ -11,10 +11,35 @@ RSpec.describe AttachmentsController, type: :controller do
       before { login(user) }
 
       it 'deletes file from question' do
-        file = fixture_file_upload(Rails.root.join('public', 'apple-touch-icon.png'), 'image/png')
-        expect { post :create, params: { question: attributes_for(:question), params: { author_id: user.id }, post: { image: file } } }.to change(ActiveStorage::Attachment, :count).by(1)
-        delete :delete_file, params: { attachment_id: question }
-        expect(question.files).to eq nil
+        question.files.attach(create_file_blob)
+        question.files.attach(create_file_blob(filename: "image1.jpg"))
+        expect{ delete :delete_file, params: { attachment_id: 1 }, format: :js }.to change(question.files, :count).by(-1)
+      end
+
+      it 'deletes file from answer' do
+        answer.files.attach(create_file_blob)
+        answer.files.attach(create_file_blob(filename: "image1.jpg"))
+        expect{ delete :delete_file, params: { attachment_id: 1 }, format: :js }.to change(answer.files, :count).by(-1)
+      end
+    end
+    context 'Not author' do
+      let(:user) { create(:user) }
+      let(:user1) { create(:user) }
+      let!(:question) { create(:question, author: user) }
+
+      let(:answer) { create(:answer, question: question, author: user) }
+      before { login(user1) }
+
+      it 'deletes file from question' do
+        question.files.attach(create_file_blob)
+        question.files.attach(create_file_blob(filename: "image1.jpg"))
+        expect{ delete :delete_file, params: { attachment_id: 1 }, format: :js }.not_to change(question.files, :count)
+      end
+
+      it 'deletes file from answer' do
+        answer.files.attach(create_file_blob)
+        answer.files.attach(create_file_blob(filename: "image1.jpg"))
+        expect{ delete :delete_file, params: { attachment_id: 1 }, format: :js }.not_to change(answer.files, :count)
       end
     end
   end

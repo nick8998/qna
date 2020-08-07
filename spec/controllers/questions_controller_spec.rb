@@ -113,6 +113,12 @@ RSpec.describe QuestionsController, type: :controller do
 
           expect(response).to redirect_to question
         end
+
+        it 'attaches the uploaded file' do
+          question = create(:question)
+          question.files.attach(create_file_blob) 
+          expect(question.files.any?).to eq(true)
+        end
       end
 
       context 'with invalid attributes' do
