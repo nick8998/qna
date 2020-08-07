@@ -29,5 +29,5 @@ table
         -answer.files.each do |file|
           p 
             = link_to file.filename.to_s, url_for(file)
-            = link_to "Delete file", delete_file_answer_path(file.id), class: "attached_file_for_a", method: :delete, :remote => true
+            = link_to "Delete file", attachment_delete_file_path(file.id), class: "attached_file", method: :delete, :remote => true
   = f.submit 'Save'

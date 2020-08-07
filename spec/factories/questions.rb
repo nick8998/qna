@@ -6,5 +6,9 @@ FactoryBot.define do
     trait :invalid do
       title { nil }
     end
+
+    trait :with_file do
+      files { ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"] }
+    end
   end
 end

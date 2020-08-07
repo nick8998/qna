@@ -1,0 +1,4 @@
+$('.attached_file').bind('ajax:success', function() {     
+  $(this).closest('p').fadeOut();
+  $('.attachment-flash').html("<%= j render 'shared/flash' %>");
+});

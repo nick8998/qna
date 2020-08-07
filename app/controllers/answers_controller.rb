@@ -1,4 +1,4 @@
-class AnswersController < ApplicationController
+  class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_answer, only: %i[destroy update update_best]
   before_action :find_question, only: %i[create]
@@ -26,12 +26,6 @@ class AnswersController < ApplicationController
     else
       flash[:alert] = "You can't choose best answer"
     end
-  end
-
-  def delete_file
-    @file = ActiveStorage::Attachment.find(params[:id])
-    @answer = @file.record
-    @file.purge
   end
 
   def destroy
