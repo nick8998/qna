@@ -60,5 +60,28 @@ feature 'User can edit his answer', %q{
           expect(page).to have_content "Body can't be blank"
           expect(page).to have_current_path question_path(question)
     end
+      scenario 'edits his answer with attached file' do
+        click_on 'Edit'
+        within '.answers' do
+          attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+          click_on 'Save'
+        end
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+      scenario 'can destroy attached files' do
+        click_on 'Edit'
+        within '.answers' do
+          attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+          click_on 'Save'
+        end
+        click_on 'Edit'
+        within '.answers' do
+            click_on 'Delete file', match: :first
+            click_on 'Save'
+        end
+        expect(page).not_to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
   end    
 end

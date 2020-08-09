@@ -52,21 +52,41 @@ feature 'Author can edit his question', %q{
 
     scenario 'edits his question with errors' do
       click_on 'Edit'
-
-          within '.question' do
-            fill_in 'Your question title', with: ''
-            fill_in 'Your question body', with: ''
-            click_on 'Save'
-            expect(page).to have_selector 'textarea'
-          end
-          expect(page).to have_content "Body can't be blank"
-          expect(page).to have_content "Title can't be blank"
-          expect(page).to have_current_path question_path(question)
-    end
-
-    scenario "tries to edit other user's question" do
-      expect(page).to have_link('Edit', count: 1)
+      within '.question' do
+        fill_in 'Your question title', with: ''
+        fill_in 'Your question body', with: ''
+        click_on 'Save'
+        expect(page).to have_selector 'textarea'
+      end
+      expect(page).to have_content "Body can't be blank"
+      expect(page).to have_content "Title can't be blank"
       expect(page).to have_current_path question_path(question)
     end
+
+    scenario 'edit a question with attached file' do
+        click_on 'Edit'
+        within '.question' do
+          attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+          click_on 'Save'
+        end
+
+        expect(page).to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
+
+      scenario 'can destroy attached files' do
+        click_on 'Edit'
+        within '.question' do
+          attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+          click_on 'Save'
+        end
+        click_on 'Edit'
+        within '.question' do
+            click_on 'Delete file', match: :first
+            click_on 'Save'
+        end
+        expect(page).not_to have_link 'rails_helper.rb'
+        expect(page).to have_link 'spec_helper.rb'
+      end
   end    
 end

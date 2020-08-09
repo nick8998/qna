@@ -1,4 +1,4 @@
-class AnswersController < ApplicationController
+  class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :find_answer, only: %i[destroy update update_best]
   before_action :find_question, only: %i[create]
@@ -49,6 +49,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:body)    
+    params.require(:answer).permit(:body, files: [])    
   end
 end

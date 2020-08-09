@@ -5,8 +5,14 @@ table
       -if current_user&.author_of?(answer)
         td= link_to 'Destroy answer', answer, class: 'destroy-answer', data: { confirm: 'Are you sure?' }, method: :delete, :remote => true
         td= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+      -if answer.files.attached?
+        -answer.files.each do |file|
+          td= link_to file.filename.to_s, url_for(file)
     -else
       td class="a-body" data = {answer_id: answer.id} = answer.body
+      -if answer.files.attached?
+        -answer.files.each do |file|
+          td= link_to file.filename.to_s, url_for(file)
       -if current_user&.author_of?(answer.question) && !answer.best?
         td= link_to 'Best', update_best_answer_path(answer), class: 'best-answer-link', data: { answer_id: answer.id }, method: :patch, :remote => true
       -if current_user&.author_of?(answer)
@@ -17,4 +23,11 @@ table
 = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
   = f.label :body, 'Your answer'
   = f.text_area :body
+  = f.label :files
+  = f.file_field :files, multiple: true, direct_upload: true 
+  -if answer.files.attached?
+        -answer.files.each do |file|
+          p 
+            = link_to file.filename.to_s, url_for(file)
+            = link_to "Delete file", attachment_path(file.id), class: "attached_file", method: :delete, :remote => true
   = f.submit 'Save'
