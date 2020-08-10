@@ -3,7 +3,8 @@ p class="q-body"= question.body
 
 -if !question.reward.nil?
   p= question.reward.title
-  = image_tag("#{question.reward.picture}", size: "64")
+  -if question.reward.image.attached?
+    =image_tag(question.reward.image, size: '64x64')
 
 -if question.files.attached?
   -question.files.each do |file|
@@ -14,11 +15,16 @@ p class="q-body"= question.body
     p Links:
     ul
       -@question.links.each do |link|
-        -if link.url.include?("https://gist.github.com/")
+        -if link.gist?
           li= link.name
           script src="#{link.url}.js"
         -else
           li= link_to link.name, link.url
+          = form_with model: question do |f|
+            = f.fields_for :links do |l|
+              = link_to_remove_association "Delete link", l
+
+
 
 -if current_user&.author_of?(question)
     p= link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: @question.id }

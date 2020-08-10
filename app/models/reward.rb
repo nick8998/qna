@@ -4,5 +4,7 @@ class Reward < ApplicationRecord
   has_many :got_rewards, dependent: :destroy
   has_many :users, through: :got_rewards, dependent: :destroy
 
-  validates :title, :picture, presence: true
+  has_one_attached :image
+
+  validates :title, presence: true
 end

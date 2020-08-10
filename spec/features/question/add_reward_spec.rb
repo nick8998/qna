@@ -9,19 +9,17 @@ feature 'User can add reward to question', %q{
   given(:user) { create(:user) }
   given(:picture) { "https://www.google.com/url?sa=i&url=http%3A%2F%2Fatma-marketing.hr%2F118091%2FSnow%2F&psig=AOvVaw0FxriD546vHyim6mb_sr2t&ust=1597157025863000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCJix_NvvkOsCFQAAAAAdAAAAABAD" }
 
-  scenario 'User adds reward when asks question' do
+  scenario 'User add reward when asking question' do
     sign_in(user)
     visit new_question_path
+    fill_in 'Title', with: "Test question"
+    fill_in 'Body', with: "text text"
 
-    fill_in 'Title', with: 'Test question'
-    fill_in 'Body', with: 'text text text'
-
-    fill_in 'Reward title', with: 'My reward'
-    fill_in 'Picture', with: picture
-
+    fill_in 'Reward title', with: "My reward"
+    attach_file 'Image', "#{Rails.root}/spec/fixtures/files/image.jpg"
     click_on 'Ask'
 
-    expect(page).to have_content 'My reward'
+    expect(page).to have_content "My reward"
     expect(page).to have_css("img")
   end
 

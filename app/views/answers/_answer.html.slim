@@ -24,7 +24,7 @@ table
     p Links:
     ul
       -answer.links.each do |link|
-        -if link.url.include?("https://gist.github.com/")
+        -if link.gist?
           li= link.name
           script src="#{link.url}.js"
         -else
