@@ -10,62 +10,55 @@ feature 'User can add links to question', %q{
   given(:gist_url) { 'https://gist.github.com/nick8998/521d82a43ca5854899666d91bf757b03' }
   given(:google_url) { 'http://google.com' }
 
-  scenario 'User adds link when asks question' do
-    sign_in(user)
-    visit new_question_path
 
-    fill_in 'Title', with: 'Test question'
-    fill_in 'Body', with: 'text text text'
+  describe 'Authenticated user', js:true do
+      background do
+        sign_in(user)
 
-    fill_in 'Name', with: 'My gist'
-    fill_in 'Url', with: google_url
+        visit new_question_path
+      end
+    scenario 'adds link when asks question' do
+      fill_in 'Title', with: 'Test question'
+      fill_in 'Body', with: 'text text text'
 
-    click_on 'Ask'
+      fill_in 'Name', with: 'My gist'
+      fill_in 'Url', with: google_url
 
-    expect(page).to have_link 'My gist', href: google_url
-  end
+      click_on 'Ask'
 
-  scenario 'User adds some links when asks question', js: true do
-    sign_in(user)
+      expect(page).to have_link 'My gist', href: google_url
+    end
 
-    visit new_question_path
+    scenario 'adds some links when asks question', js: true do
+      click_on 'add link'
+      expect(page).to have_content 'Name', count: 2
+      expect(page).to have_content 'Url', count: 2
+    end
 
-    click_on 'add link'
-    expect(page).to have_content 'Name', count: 2
-    expect(page).to have_content 'Url', count: 2
-  end
+    scenario 'adds invalid url when asks question', js: true do
+      fill_in 'Title', with: 'Test question'
+      fill_in 'Body', with: 'text text text'
 
-  scenario 'User adds invalid url when asks question', js: true do
-    sign_in(user)
+      fill_in 'Name', with: 'My gist'
+      fill_in 'Url', with: "My url"
 
-    visit new_question_path
+      click_on 'Ask'
 
-    fill_in 'Title', with: 'Test question'
-    fill_in 'Body', with: 'text text text'
+      expect(page).to have_content 'Links url is not a valid URL'
+    end
 
-    fill_in 'Name', with: 'My gist'
-    fill_in 'Url', with: "My url"
+    scenario 'adds gist url when asks question', js: true do
+      fill_in 'Title', with: 'Test question'
+      fill_in 'Body', with: 'text text text'
 
-    click_on 'Ask'
+      fill_in 'Name', with: 'My gist'
+      fill_in 'Url', with: gist_url
 
-    expect(page).to have_content 'Links url is not a valid URL'
-  end
+      click_on 'Ask'
 
-  scenario 'User adds gist url when asks question', js: true do
-    sign_in(user)
-
-    visit new_question_path
-
-    fill_in 'Title', with: 'Test question'
-    fill_in 'Body', with: 'text text text'
-
-    fill_in 'Name', with: 'My gist'
-    fill_in 'Url', with: gist_url
-
-    click_on 'Ask'
-
-    expect(page).to have_content 'My gist'
-    expect(page).to have_content("Hello world")
+      expect(page).to have_content 'My gist'
+      expect(page).to have_content("Hello world")
+    end
   end
 
 end

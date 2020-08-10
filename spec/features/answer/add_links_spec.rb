@@ -11,65 +11,54 @@ feature 'User can add links to answer', %q{
   given(:gist_url) { 'https://gist.github.com/nick8998/521d82a43ca5854899666d91bf757b03' }
   given(:google_url) { 'http://google.com' }
 
-  scenario 'User adds link when give an answer', js: true do
-    sign_in(user)
+   describe 'Authenticated user', js:true do
+      background do
+        sign_in(user)
 
-    visit question_path(question)
+        visit question_path(question)
+      end
 
-    fill_in 'Body', with: 'My answer'
+    scenario 'adds link when give an answer', js: true do
+      fill_in 'Body', with: 'My answer'
 
-    fill_in 'Name', with: 'My gist'
-    fill_in 'Url', with: google_url
+      fill_in 'Name', with: 'My gist'
+      fill_in 'Url', with: google_url
 
-    click_on 'To answer'
+      click_on 'To answer'
 
-    within '.answers' do
-      expect(page).to have_link 'My gist', href: google_url
+      within '.answers' do
+        expect(page).to have_link 'My gist', href: google_url
+      end
     end
-  end
 
-  scenario 'User adds some links when give an answer', js: true do
-    sign_in(user)
+    scenario 'adds some links when give an answer', js: true do
+      click_on 'add link'
 
-    visit question_path(question)
-
-    click_on 'add link'
-
-    within '.new-answer' do
-      expect(page).to have_content 'Name', count: 2
-      expect(page).to have_content 'Url', count: 2
+      within '.new-answer' do
+        expect(page).to have_content 'Name', count: 2
+        expect(page).to have_content 'Url', count: 2
+      end
     end
-  end
 
-  scenario 'User adds invalid url when give an answer', js: true do
-    sign_in(user)
+    scenario 'adds invalid url when give an answer', js: true do
+      fill_in 'Body', with: 'My answer'
 
-    visit question_path(question)
+      fill_in 'Name', with: 'My gist'
+      fill_in 'Url', with: "My url"
 
-    fill_in 'Body', with: 'My answer'
+      click_on 'To answer'
 
-    fill_in 'Name', with: 'My gist'
-    fill_in 'Url', with: "My url"
+      expect(page).to have_content 'Links url is not a valid URL'
+    end
 
-    click_on 'To answer'
+    scenario 'adds gist url when give an answer', js: true do
+      fill_in 'Body', with: 'My answer'
 
-    expect(page).to have_content 'Links url is not a valid URL'
-  end
+      fill_in 'Name', with: 'My gist'
+      fill_in 'Url', with: gist_url
 
-  scenario 'User adds gist url when give an answer', js: true do
-    sign_in(user)
-
-    visit question_path(question)
-
-    fill_in 'Body', with: 'My answer'
-
-    fill_in 'Name', with: 'My gist'
-    fill_in 'Url', with: gist_url
-
-    click_on 'To answer'
-
-    visit question_path(question)
-    within '.new-answer' do
+      click_on 'To answer'
+      visit question_path(question)
       expect(page).to have_content 'My gist'
       expect(page).to have_content("Hello world")
     end

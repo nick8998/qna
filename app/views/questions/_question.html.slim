@@ -1,5 +1,10 @@
 h1 class="q-title"= question.title
 p class="q-body"= question.body
+
+-if !question.reward.nil?
+  p= question.reward.title
+  = image_tag("#{question.reward.picture}", size: "64")
+
 -if question.files.attached?
   -question.files.each do |file|
     p= link_to file.filename.to_s, url_for(file)

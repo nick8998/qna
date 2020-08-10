@@ -19,9 +19,10 @@
   end
 
   def update_best 
-    @question = @answer.question 
+    @question = @answer.question
     if current_user.author_of?(@question)
       @answer.choose_best
+      @answer.author.rewards << @question.reward
       flash[:notice] = "This answer is best"
     else
       flash[:alert] = "You can't choose best answer"

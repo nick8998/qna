@@ -13,4 +13,12 @@
 
   =render 'form_link', f: f
 
+  p Reward:
+  p
+    = f.fields_for :reward do |r|
+      = r.label :title, 'Reward title'
+      = r.text_field :title
+      = r.label :picture
+      = r.text_field :picture
+
   p  = f.submit 'Ask'

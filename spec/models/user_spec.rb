@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
   it { should validate_presence_of :email }
   it { should validate_presence_of :password }
+  it { should have_many(:got_rewards).dependent(:destroy) }
+  it { should have_many(:rewards).through(:got_rewards).dependent(:destroy) }
 
   describe '#author_of?' do
     let(:user) { create(:user) }
