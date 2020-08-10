@@ -8,12 +8,6 @@
 .question
   =render @question
 
-.links
-  p Links:
-  ul
-    -@question.links.each do |link|
-      li= link_to link.name, link.url
-
 .answer-flash
 
 .answers
@@ -30,15 +24,8 @@
     = f.label :files
     = f.file_field :files, multiple: true, direct_upload: true 
 
-  p Links:
-  p
-    = f.fields_for :links do |l|
-      p
-        = l.label :name, 'Link name'
-        = l.text_field :name
-      p
-        = l.label :url
-        = l.text_field :url
+    = render 'form_link', f: f
+
 
   p= f.submit 'To answer'
 

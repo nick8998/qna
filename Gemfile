@@ -34,6 +34,8 @@ gem 'devise'
 
 gem 'jquery-rails'
 gem 'aws-sdk', '~> 3'
+gem "cocoon"
+gem 'validate_url'
 
 gem 'dotenv-rails', :groups => [:development, :test]
 
