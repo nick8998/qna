@@ -19,10 +19,9 @@ p class="q-body"= question.body
           li= link.name
           script src="#{link.url}.js"
         -else
-          li= link_to link.name, link.url
-          = form_with model: question do |f|
-            = f.fields_for :links do |l|
-              = link_to_remove_association "Delete link", l
+          li
+            = link_to link.name, link.url
+            = link_to 'Delete link', link_path(link.id), class: 'destroy-link', method: :delete, remote: true
 
 
 

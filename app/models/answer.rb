@@ -14,8 +14,12 @@ class Answer < ApplicationRecord
   def choose_best
     ActiveRecord::Base.transaction do
       old_best_answer = question.answers.find_by(best: true)
-      old_best_answer.update!(best: false) if old_best_answer && old_best_answer != self
+      if old_best_answer && old_best_answer != self
+        old_best_answer.update!(best: false)
+        question.reward.user_id = nil
+      end
       update!(best: true)
+      author.rewards << question.reward
     end
   end
 end
