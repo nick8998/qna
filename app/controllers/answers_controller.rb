@@ -6,12 +6,18 @@
   def create
     @answer = @question.answers.create(answer_params)
     @answer.update(author_id: current_user.id)
+    @answer.links.each do |link|
+      link.author = current_user
+    end
   end
 
   def update
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
       @question = @answer.question
+      @answer.links.each do |link|
+        link.author = current_user
+      end
       flash[:notice] = "You answer was updated"
     else
       flash[:alert] = "You can't update answer"
@@ -49,6 +55,6 @@
   end
 
   def answer_params
-    params.require(:answer).permit(:body, files: [], links_attributes: [:id, :name, :url, :_destroy])    
+    params.require(:answer).permit(:body, files: [], links_attributes: [:id, :name, :url, :_destroy, :author])    
   end
 end

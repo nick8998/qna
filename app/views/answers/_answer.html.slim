@@ -25,12 +25,17 @@ table
     ul
       -answer.links.each do |link|
         -if link.gist?
-          li= link.name
+          li
+            = link.name
+            -if current_user.author_of?(link)
+              = link_to 'Delete link', link_path(link.id), class: 'destroy-link', method: :delete, remote: true
           script src="#{link.url}.js"
+
         -else
           li
             = link_to link.name, link.url
-            = link_to 'Delete link', link_path(link.id), class: 'destroy-link', method: :delete, remote: true
+            -if current_user.author_of?(link)
+              = link_to 'Delete link', link_path(link.id), class: 'destroy-link', method: :delete, remote: true
 
 
 

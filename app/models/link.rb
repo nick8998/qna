@@ -9,4 +9,6 @@ class Link < ApplicationRecord
   def gist?
     url.include?("https://gist.github.com/")
   end
+
+
 end

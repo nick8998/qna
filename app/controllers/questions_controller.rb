@@ -23,6 +23,9 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(question_params)
     @question.author = current_user
+    @question.links.each do |link|
+      link.author = current_user
+    end
     if @question.save
       redirect_to @question, notice: "Your question successfully created."
     else 
@@ -33,10 +36,14 @@ class QuestionsController < ApplicationController
   def update
     if current_user.author_of?(@question)
       @question.update(question_params)
+      @question.links.each do |link|
+        link.author = current_user
+      end
       flash[:notice] = "Your question was updated"
     else
       flash[:alert] = "You can't update question" 
     end
+    
   end
 
   def destroy
@@ -56,6 +63,6 @@ class QuestionsController < ApplicationController
 
   
   def question_params
-    params.require(:question).permit(:title, :body, files: [], links_attributes: [:id, :name, :url, :_destroy], reward_attributes: [:title, :image])    
+    params.require(:question).permit(:title, :body, files: [], links_attributes: [:id, :name, :url, :_destroy, author: current_user], reward_attributes: [:title, :image])    
   end
 end
