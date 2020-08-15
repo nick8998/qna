@@ -23,6 +23,7 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(question_params)
     @question.author = current_user
+    #При создании линки, присоединяем автора для каждой линки. Для это проходим по всем и добавляем автора. Работает.
     @question.links.each do |link|
       link.author = current_user
     end
@@ -36,8 +37,12 @@ class QuestionsController < ApplicationController
   def update
     if current_user.author_of?(@question)
       @question.update(question_params)
+      #При апдейте вопроса, проходим так же по каждой линке и добавляем автора. И тут уже не работает, link.author = nil.
+      #То есть на странице отсутвует кнопка Delete link, соответсвенно тесты с такой проверкой падают
       @question.links.each do |link|
-        link.author = current_user
+        if link.author.nil?
+          link.author = current_user
+        end
       end
       flash[:notice] = "Your question was updated"
     else

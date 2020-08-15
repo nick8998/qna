@@ -6,6 +6,7 @@
   def create
     @answer = @question.answers.create(answer_params)
     @answer.update(author_id: current_user.id)
+    #При создании линки, присоединяем автора для каждой линки. Для это проходим по всем и добавляем автора. Работает.
     @answer.links.each do |link|
       link.author = current_user
     end
@@ -15,8 +16,11 @@
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
       @question = @answer.question
+      #При апдейте ответа, проходим так же по каждой линке и добавляем автора. И тут уже не работает, link.author = nil.
       @answer.links.each do |link|
-        link.author = current_user
+        if link.author.nil?
+          link.author = current_user
+        end
       end
       flash[:notice] = "You answer was updated"
     else
