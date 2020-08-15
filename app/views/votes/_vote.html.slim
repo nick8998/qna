@@ -1,0 +1,8 @@
+p class="voting"
+  = link_to 'Up', vote_up_votes_path(vote), :method => :put, remote: true
+  = link_to 'Down', vote_down_votes_path(vote), :method => :put
+  = link_to 'Cancel', vote_cancel_votes_path(vote), :method => :delete
+-if (vote.votes_up+vote.votes_down) != 0
+  p class="voting-result" = (vote.votes_up*100)/(vote.votes_up+vote.votes_down)
+-else 
+  p class="voting-result" = 0

@@ -15,4 +15,12 @@ Rails.application.routes.draw do
   namespace :user do
     resources :rewards, only: :index
   end
+
+  resources :votes do
+    collection do
+     put '/vote_up/:id' => "votes#vote_up", :as => :vote_up
+     put '/vote_down/:id' => "votes#vote_down", :as => :vote_down
+     delete '/vote_cancel/:id' => "votes#vote_cancel", :as => :vote_cancel
+    end
+  end
 end

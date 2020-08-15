@@ -26,6 +26,7 @@ class QuestionsController < ApplicationController
     @question.links.each do |link|
       link.author = current_user
     end
+    @question.vote = Vote.new
     if @question.save
       redirect_to @question, notice: "Your question successfully created."
     else 

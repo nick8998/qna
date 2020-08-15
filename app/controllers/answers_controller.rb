@@ -6,17 +6,12 @@
   def create
     @answer = @question.answers.create(answer_params)
     @answer.update(author_id: current_user.id)
-    @answer.links.each do |link|
-      link.author = current_user
-    end
-
     respond_to do |format|
       if @answer.save
         format.json { render json: @answer }
       else
         format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
       end
-      
     end
   end
 
@@ -24,9 +19,6 @@
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
       @question = @answer.question
-      @answer.links.each do |link|
-        link.author = current_user
-      end
       flash[:notice] = "You answer was updated"
     else
       flash[:alert] = "You can't update answer"
