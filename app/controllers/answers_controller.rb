@@ -6,12 +6,22 @@
   def create
     @answer = @question.answers.create(answer_params)
     @answer.update(author_id: current_user.id)
+    #При создании линки, присоединяем автора для каждой линки. Для это проходим по всем и добавляем автора. Работает.
+    @answer.links.each do |link|
+      link.author = current_user
+    end
   end
 
   def update
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
       @question = @answer.question
+      #При апдейте ответа, проходим так же по каждой линке и добавляем автора. И тут уже не работает, link.author = nil.
+      @answer.links.each do |link|
+        if link.author.nil?
+          link.author = current_user
+        end
+      end
       flash[:notice] = "You answer was updated"
     else
       flash[:alert] = "You can't update answer"
@@ -19,7 +29,7 @@
   end
 
   def update_best 
-    @question = @answer.question 
+    @question = @answer.question
     if current_user.author_of?(@question)
       @answer.choose_best
       flash[:notice] = "This answer is best"
@@ -49,6 +59,6 @@
   end
 
   def answer_params
-    params.require(:answer).permit(:body, files: [])    
+    params.require(:answer).permit(:body, files: [], links_attributes: [:id, :name, :url, :_destroy, :author])    
   end
 end

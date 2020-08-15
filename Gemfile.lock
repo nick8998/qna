@@ -991,6 +991,7 @@ GEM
       regexp_parser (~> 1.5)
       xpath (~> 3.2)
     childprocess (3.0.0)
+    cocoon (1.2.14)
     concurrent-ruby (1.1.6)
     crass (1.0.6)
     devise (4.7.2)
@@ -1151,6 +1152,9 @@ GEM
     turbolinks-source (5.2.0)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
+    validate_url (1.0.11)
+      activemodel (>= 3.0.0)
+      public_suffix
     warden (1.2.8)
       rack (>= 2.0.6)
     web-console (4.0.4)
@@ -1181,6 +1185,7 @@ DEPENDENCIES
   bootsnap (>= 1.4.2)
   byebug
   capybara (>= 2.15)
+  cocoon
   devise
   dotenv-rails
   factory_bot_rails
@@ -1201,6 +1206,7 @@ DEPENDENCIES
   sqlite3 (~> 1.4)
   turbolinks (~> 5)
   tzinfo-data
+  validate_url
   web-console (>= 3.3.0)
   webdrivers
   webpacker (~> 4.0)

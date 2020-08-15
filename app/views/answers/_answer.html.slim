@@ -8,6 +8,7 @@ table
       -if answer.files.attached?
         -answer.files.each do |file|
           td= link_to file.filename.to_s, url_for(file)
+
     -else
       td class="a-body" data = {answer_id: answer.id} = answer.body
       -if answer.files.attached?
@@ -18,6 +19,25 @@ table
       -if current_user&.author_of?(answer)
         td= link_to 'Destroy answer', answer, class: 'destroy-answer', data: { confirm: 'Are you sure?' }, method: :delete, :remote => true
         td= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+-if answer.links.any?
+  .links
+    p Links:
+    ul
+      -answer.links.each do |link|
+        -if link.gist?
+          li
+            = link.name
+            -if current_user.author_of?(link)
+              = link_to 'Delete link', link_path(link.id), class: 'destroy-link', method: :delete, remote: true
+          script src="#{link.url}.js"
+
+        -else
+          li
+            = link_to link.name, link.url
+            -if current_user.author_of?(link)
+              = link_to 'Delete link', link_path(link.id), class: 'destroy-link', method: :delete, remote: true
+
+
 
 
 = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}" } do |f|
@@ -25,9 +45,11 @@ table
   = f.text_area :body
   = f.label :files
   = f.file_field :files, multiple: true, direct_upload: true 
+  = render 'questions/form_link', f: f
   -if answer.files.attached?
         -answer.files.each do |file|
           p 
             = link_to file.filename.to_s, url_for(file)
             = link_to "Delete file", attachment_path(file.id), class: "attached_file", method: :delete, :remote => true
+
   = f.submit 'Save'

@@ -1,0 +1,5 @@
+-@rewards.each do |reward|
+  h3= reward.question.title
+  p= reward.title
+  -if reward.image.attached?
+    =image_tag(reward.image, size: '64x64')

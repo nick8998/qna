@@ -15,6 +15,7 @@
 
 .answer-errors
   = render 'shared/errors', resource: @answer
+
 = form_with model: [@question, @answer], class: 'new-answer' do |f|
   p
     = f.label :body
@@ -22,5 +23,9 @@
   p
     = f.label :files
     = f.file_field :files, multiple: true, direct_upload: true 
+
+    = render 'form_link', f: f
+
+
   p= f.submit 'To answer'
 
