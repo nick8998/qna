@@ -8,7 +8,9 @@ feature 'User can browse answers', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question) }
+  before { question.vote = Vote.new }
   given!(:answers) { create_list(:answer, 5, question: question) }
+  before { answer.vote = Vote.new }
   
   
     scenario 'Authenticated user can browse answers' do

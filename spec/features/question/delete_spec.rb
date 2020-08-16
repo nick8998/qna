@@ -10,6 +10,7 @@ feature 'Author can delete question', %q{
 
     describe 'Not author' do
       given!(:question) { create(:question) } 
+      before { question.vote = Vote.new }
 
       scenario  "can't destroy answer" do
         sign_in(user)
@@ -20,6 +21,7 @@ feature 'Author can delete question', %q{
 
     describe 'Author' do
       given!(:question) { create(:question, author: user) }
+      before { question.vote = Vote.new }
       background do
         sign_in(user)
         visit question_path(question)

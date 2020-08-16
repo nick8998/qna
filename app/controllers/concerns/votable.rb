@@ -1,18 +1,22 @@
 module Votable
   extend ActiveSupport::Concern
 
-  included do
-    before_action :find_vote
-  end
-
   def render_json_voting
     respond_to do |format|
       if @vote.persisted?
-        format.json { render json: @vote }
+        format.json { render_json(@vote) }
       else
-        format.json { render json: @vote.errors.full_messages, status: :unprocessable_entity }
+        format.json { render_errors(@vote) }
       end
     end
+  end
+
+  def render_errors(item)
+    render json: item.errors.full_messages, status: :unprocessable_entity
+  end
+
+  def render_json(item)
+    render json: @vote
   end
 
   def author_exist?
@@ -36,12 +40,5 @@ module Votable
     end
   end
 
-
-
-  private
-
-  def find_vote
-    @vote = Vote.find(params[:id])
-  end
 
 end

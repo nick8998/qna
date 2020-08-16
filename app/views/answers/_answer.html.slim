@@ -1,16 +1,23 @@
 table
   tr
     -if answer.best?
-      td class="a-best-body" style = "color: red" data = {answer_id: answer.id} = answer.body
+      td class="a-best-body" style = "color: red" data = {answer_id: answer.id} 
+        = answer.body
+        .voting-answer
+          =render answer.vote, resource: answer
       -if current_user&.author_of?(answer)
         td= link_to 'Destroy answer', answer, class: 'destroy-answer', data: { confirm: 'Are you sure?' }, method: :delete, :remote => true
         td= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
       -if answer.files.attached?
         -answer.files.each do |file|
           td= link_to file.filename.to_s, url_for(file)
+        
 
     -else
-      td class="a-body" data = {answer_id: answer.id} = answer.body
+      td class="a-body" data = {answer_id: answer.id} 
+        = answer.body
+        .voting-answer
+          =render answer.vote, resource: answer
       -if answer.files.attached?
         -answer.files.each do |file|
           td= link_to file.filename.to_s, url_for(file)
@@ -19,6 +26,8 @@ table
       -if current_user&.author_of?(answer)
         td= link_to 'Destroy answer', answer, class: 'destroy-answer', data: { confirm: 'Are you sure?' }, method: :delete, :remote => true
         td= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+        
+
 -if answer.links.any?
   .links
     p Links:
@@ -27,18 +36,17 @@ table
         -if link.gist?
           li
             = link.name
-            -if current_user.author_of?(link.linkable)
+            -if current_user&.author_of?(link.linkable)
               = link_to 'Delete link', link_path(link.id), class: 'destroy-link', method: :delete, remote: true
           script src="#{link.url}.js"
 
         -else
           li
             = link_to link.name, link.url
-            -if current_user.author_of?(link.linkable)
+            -if current_user&.author_of?(link.linkable)
               = link_to 'Delete link', link_path(link.id), class: 'destroy-link', method: :delete, remote: true
 
-.voting-answer
-  =render answer.vote, resource: answer
+
 
 
 

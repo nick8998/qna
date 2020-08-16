@@ -1,6 +1,8 @@
 class VotesController < ApplicationController
 
   include Votable
+
+  before_action :find_vote
   before_action :authenticate_user!
   
 
@@ -23,5 +25,10 @@ class VotesController < ApplicationController
     render_json_voting
   end
 
+  private
+
+  def find_vote
+    @vote = Vote.find(params[:id])
+  end
   
 end

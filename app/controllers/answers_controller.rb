@@ -4,9 +4,11 @@
   before_action :find_question, only: %i[create]
 
   def create
-    @answer = @question.answers.create(answer_params)
-    @answer.update(author_id: current_user.id)
-    @answer.vote = Vote.new
+    ActiveRecord::Base.transaction do
+      @answer = @question.answers.create(answer_params)
+      @answer.vote = Vote.new 
+      @answer.update(author_id: current_user.id)
+    end
     respond_to do |format|
       if @answer.save
         format.json { render json: @answer }
@@ -49,11 +51,11 @@
   private 
 
   def find_answer
-    @answer = Answer.find(params[:id])
+    @answer = Answer.with_attached_files.find(params[:id])
   end
 
   def find_question
-    @question = Question.find(params[:question_id])
+    @question = Question.with_attached_files.find(params[:question_id])
   end
 
   def answer_params

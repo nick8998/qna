@@ -9,6 +9,7 @@ feature 'Author can edit his question', %q{
   given!(:user) { create(:user) }
   given!(:question) { create(:question, author: user) }
   given!(:user1) { create(:user) }
+  before { question.vote = Vote.new }
 
   scenario 'Unauthenticated can not edit answer' do
     visit question_path(question)
@@ -29,6 +30,7 @@ feature 'Author can edit his question', %q{
   describe 'Author', js: true do
     given!(:question1) { create(:question, author: user1) }
     given!(:answer) { create(:answer, question: question) }
+    before { answer.vote = Vote.new }
 
     background do
       sign_in(user)

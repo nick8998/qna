@@ -23,9 +23,6 @@ class QuestionsController < ApplicationController
   def create
     @question = Question.new(question_params)
     @question.author = current_user
-    @question.links.each do |link|
-      link.author = current_user
-    end
     @question.vote = Vote.new
     if @question.save
       redirect_to @question, notice: "Your question successfully created."
@@ -37,9 +34,6 @@ class QuestionsController < ApplicationController
   def update
     if current_user.author_of?(@question)
       @question.update(question_params)
-      @question.links.each do |link|
-        link.author = current_user
-      end
       flash[:notice] = "Your question was updated"
     else
       flash[:alert] = "You can't update question" 

@@ -1,10 +1,9 @@
 class Answer < ApplicationRecord
-  include Votable
-
   belongs_to :author, class_name: "User", optional: true 
   belongs_to :question
 
   has_many :links, dependent: :destroy, as: :linkable
+  has_one :vote, dependent: :destroy, as: :votable
   
 
   has_many_attached :files
@@ -19,10 +18,10 @@ class Answer < ApplicationRecord
       old_best_answer = question.answers.find_by(best: true)
       if old_best_answer && old_best_answer != self
         old_best_answer.update!(best: false)
-        question.reward.user_id = nil
+        question.reward.user_id = nil if question.reward.present?
       end
       update!(best: true)
-      author.rewards << question.reward
+      author.rewards << question.reward if question.reward.present?
     end
   end
 end
