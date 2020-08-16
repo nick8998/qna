@@ -37,6 +37,9 @@ table
             -if current_user.author_of?(link.linkable)
               = link_to 'Delete link', link_path(link.id), class: 'destroy-link', method: :delete, remote: true
 
+.voting-answer
+  =render answer.vote, resource: answer
+
 
 
 

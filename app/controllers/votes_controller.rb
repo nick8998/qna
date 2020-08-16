@@ -1,44 +1,27 @@
 class VotesController < ApplicationController
+
+  include Votable
   before_action :authenticate_user!
-  before_action :find_vote
+  
 
   def vote_up
-    if @vote.question.author_id != current_user.id || @vote.votes_users.find_by(user_id: current_user.id).nil?
-      @vote.update_attribute(:votes_up, @vote.votes_up + 1)
-      @vote.users << current_user
-      @vote.votes_users.find_by(user_id: current_user.id).update_attribute(:voted, true)
+    if author_exist?
+      update_and_add_user
     end
-    respond_to do |format|
-      if @vote.persisted?
-        format.json { render json: @vote }
-      else
-        format.json { render json: @vote.errors.full_messages, status: :unprocessable_entity }
-      end
-    end
+    render_json_voting
   end
 
   def vote_down
-    if @vote.question.author_id != current_user.id || @vote.votes_users.find_by(user_id: current_user.id).nil?
-      @vote.update_attribute(:votes_down, @vote.votes_down + 1)
-      @vote.users << current_user
-      @vote.votes_users.find_by(user_id: current_user.id).update_attribute(:voted, false)
+    if author_exist?
+      update_and_add_user(:votes_down, @vote.votes_down, false)
     end
+    render_json_voting
   end
 
   def vote_cancel
-    if @vote.votes_users.find_by(user_id: current_user.id).present?
-      if @vote.votes_users.find_by(user_id: current_user.id).voted
-        @vote.update_attribute(:votes_up, @vote.votes_up - 1)
-      else
-        @vote.update_attribute(:votes_down, @vote.votes_down - 1)
-      end
-      @vote.votes_users.find_by(user_id: current_user.id).destroy
-    end
+    cancel
+    render_json_voting
   end
 
-  private
-
-  def find_vote
-    @vote = Vote.find(params[:id])
-  end
+  
 end

@@ -6,6 +6,7 @@
   def create
     @answer = @question.answers.create(answer_params)
     @answer.update(author_id: current_user.id)
+    @answer.vote = Vote.new
     respond_to do |format|
       if @answer.save
         format.json { render json: @answer }

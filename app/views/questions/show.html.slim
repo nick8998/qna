@@ -8,6 +8,9 @@
 .question
   =render @question
 
+.voting-question
+  =render @question.vote, resource: @question
+
 .answer-flash
 
 .answers

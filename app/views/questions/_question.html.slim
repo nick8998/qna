@@ -1,8 +1,6 @@
 h1 class="q-title"= question.title
 p class="q-body"= question.body
 
-.voting
-  =render question.vote
 
 -if !question.reward.nil?
   p= question.reward.title

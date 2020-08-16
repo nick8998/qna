@@ -1,5 +1,5 @@
 class Vote < ApplicationRecord
-  belongs_to :question
+  belongs_to :votable, polymorphic: true
 
   has_many :votes_users, dependent: :destroy
   has_many :users, through: :votes_users, dependent: :destroy
