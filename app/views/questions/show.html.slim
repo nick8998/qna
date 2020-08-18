@@ -9,7 +9,7 @@
   =render @question
 
 .voting-question
-  =render @question.vote, resource: @question
+  =render 'votes/vote', resource: @question
 
 .answer-flash
 

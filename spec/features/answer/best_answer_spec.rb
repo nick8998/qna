@@ -9,8 +9,8 @@ feature 'User can choose best answer', %q{
   given(:user) { create(:user) }
   given!(:question) { create(:question, author: user) }
   given!(:answer) { create(:answer, question: question) }
-  before { question.vote = Vote.new }
-  before { answer.vote = Vote.new }
+  before { question.build_vote.save }
+  before { answer.build_vote.save }
   
   given(:user1) { create(:user) }
     

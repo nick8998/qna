@@ -1,12 +1,10 @@
 -if current_user.present?
   -if !current_user.author_of?(resource) 
     p 
-      = link_to 'Up', vote_up_votes_path(vote), :method => :put, remote: true
-      = link_to 'Down', vote_down_votes_path(vote), :method => :put, remote: true
-      = link_to 'Cancel', vote_cancel_votes_path(vote), :method => :delete, remote: true
+      = link_to 'Up', "/#{resource.class.name.pluralize.downcase}/#{resource.id}/vote_up", :method => :put, remote: true 
+      = link_to 'Down', "/#{resource.class.name.pluralize.downcase}/#{resource.id}/vote_down", :method => :put, remote: true
+      = link_to 'Cancel', "/#{resource.class.name.pluralize.downcase}/#{resource.id}/vote_cancel", :method => :delete, remote: true
 
-
-p class="voting-result" = (vote.votes_up-vote.votes_down)
-
+p class="voting-result"= resource.vote.value
 
 .new-result

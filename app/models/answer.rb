@@ -1,9 +1,12 @@
 class Answer < ApplicationRecord
+  include VotableModel
+  has_one :vote, dependent: :destroy, as: :votable
+
   belongs_to :author, class_name: "User", optional: true 
   belongs_to :question
 
   has_many :links, dependent: :destroy, as: :linkable
-  has_one :vote, dependent: :destroy, as: :votable
+  
   
 
   has_many_attached :files

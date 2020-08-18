@@ -10,8 +10,8 @@ feature 'User can vote for answer', %q{
   given(:question) { create(:question, author: user) }
   given!(:answer) { create(:answer, question: question, author: user) }
 
-  before { question.vote = Vote.new }
-  before { answer.vote = Vote.new }
+  before { question.build_vote.save }
+  before { answer.build_vote.save }
   
   given(:user1) { create(:user) }
     

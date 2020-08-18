@@ -7,7 +7,7 @@ feature 'Author can delete answer', %q{
 } do
   given(:user) { create(:user) }
   given(:question) { create(:question) }
-  before { question.vote = Vote.new }
+  before { question.build_vote.save }
 
     scenario 'Unauthenticated can not edit answer' do
       visit question_path(question)

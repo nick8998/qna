@@ -1,12 +1,32 @@
 module Votable
   extend ActiveSupport::Concern
 
+  def vote_up
+    if model_klass.author_exist?(current_user)
+      model_klass.create_positive_vote(current_user)
+    end
+    render_json_voting
+  end
+
+
+  def vote_down
+    if model_klass.author_exist?(current_user)
+      model_klass.create_negative_vote(current_user)
+    end
+    render_json_voting
+  end
+
+  def vote_cancel
+    model_klass.cancel(current_user)
+    render_json_voting
+  end
+
   def render_json_voting
     respond_to do |format|
-      if @vote.persisted?
-        format.json { render_json(@vote) }
+      if model_klass.vote.persisted?
+        format.json { render_json(model_klass.vote) }
       else
-        format.json { render_errors(@vote) }
+        format.json { render_errors(model_klass.vote) }
       end
     end
   end
@@ -16,29 +36,13 @@ module Votable
   end
 
   def render_json(item)
-    render json: @vote
+    render json: item
   end
 
-  def author_exist?
-    @vote.votable.author_id != current_user.id && @vote.votes_users.find_by(user_id: current_user.id).nil?
-  end
+  private
 
-  def update_and_add_user(votes = :votes_up, vote = @vote.votes_up, bool = true)
-    @vote.update_attribute(votes, vote + 1)
-    @vote.users << current_user
-    @vote.votes_users.find_by(user_id: current_user.id).update_attribute(:voted, bool)
+  def model_klass
+    controller_name.classify.constantize.find(params[:id])
   end
-
-  def cancel
-    if @vote.votes_users.find_by(user_id: current_user.id).present?
-      if @vote.votes_users.find_by(user_id: current_user.id).voted
-        @vote.update_attribute(:votes_up, @vote.votes_up - 1)
-      else
-        @vote.update_attribute(:votes_down, @vote.votes_down - 1)
-      end
-      @vote.votes_users.find_by(user_id: current_user.id).destroy
-    end
-  end
-
 
 end

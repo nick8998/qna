@@ -8,7 +8,7 @@ feature 'User can create answer the question', %q{
 
   given(:user) { create(:user) }
   given(:question) { create(:question) }
-  before { question.vote = Vote.new }
+  before { question.build_vote.save }
 
     describe 'Authenticated user', js:true do
       background do

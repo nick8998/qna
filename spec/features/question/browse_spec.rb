@@ -8,6 +8,9 @@ feature 'User can browse questions', %q{
 
   given(:user) { create(:user) }
   given!(:questions) { create_list(:question, 5) }
+  before { questions.each do |q|
+            q.build_vote.save
+            end }
 
     scenario 'authenticated can browse questions' do
       sign_in(user)

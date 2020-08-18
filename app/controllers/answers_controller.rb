@@ -1,14 +1,13 @@
-  class AnswersController < ApplicationController
+class AnswersController < ApplicationController
+  include Votable
   before_action :authenticate_user!
   before_action :find_answer, only: %i[destroy update update_best]
   before_action :find_question, only: %i[create]
 
   def create
-    ActiveRecord::Base.transaction do
-      @answer = @question.answers.create(answer_params)
-      @answer.vote = Vote.new 
-      @answer.update(author_id: current_user.id)
-    end
+    @answer = @question.answers.create(answer_params)
+    @answer.author = current_user
+    @answer.build_vote.save
     respond_to do |format|
       if @answer.save
         format.json { render json: @answer }
@@ -59,6 +58,6 @@
   end
 
   def answer_params
-    params.require(:answer).permit(:body, files: [], links_attributes: [:id, :name, :url, :_destroy, :author])    
+    params.require(:answer).permit(:body, files: [], links_attributes: [:id, :name, :url, :_destroy])    
   end
 end

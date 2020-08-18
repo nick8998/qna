@@ -8,9 +8,9 @@ feature 'User can edit his answer', %q{
 
   given!(:user) { create(:user) }
   given!(:question) { create(:question) }
-  before { question.vote = Vote.new }
+  before { question.build_vote.save }
   given!(:answer) { create(:answer, question: question, author: user) }
-  before { answer.vote = Vote.new }
+  before { answer.build_vote.save }
 
   scenario 'Unauthenticated can not edit answer' do
     visit question_path(question)

@@ -86,8 +86,7 @@ ActiveRecord::Schema.define(version: 2020_08_15_095934) do
   end
 
   create_table "votes", force: :cascade do |t|
-    t.integer "votes_up", default: 0
-    t.integer "votes_down", default: 0
+    t.integer "value", default: 0
     t.string "votable_type"
     t.integer "votable_id"
     t.datetime "created_at", precision: 6, null: false

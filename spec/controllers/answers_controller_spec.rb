@@ -14,26 +14,19 @@ RSpec.describe AnswersController, type: :controller do
       context 'with valid attributes' do
         it 'save a new answer in the database' do
           question = create(:question)
-          expect { post :create, params: { answer: attributes_for(:answer), question_id: question.id, author_id: user.id }, format: :js }.to change(question.answers, :count).by(1)
-          expect { post :create, params: { answer: attributes_for(:answer), question_id: question.id, author_id: user.id }, format: :js }.to change(user.authored_answers, :count).by(1)
-        end
-
-        it 'redirects to question' do
-          post :create, params: { answer: attributes_for(:answer), question_id: question.id, author_id: user.id, format: :js }
-
-          expect(response).to render_template :create
+          expect { post :create, params: { answer: attributes_for(:answer), question_id: question.id, author_id: user.id }, format: :json }.to change(question.answers, :count).by(1)
+          expect { post :create, params: { answer: attributes_for(:answer), question_id: question.id, author_id: user.id }, format: :json }.to change(user.authored_answers, :count).by(1)
         end
       end
 
       context 'with invalid attributes' do
         it 'does not save the answer' do
-          expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, author_id: user.id }, format: :js}.to_not change(Answer, :count)
+          expect { post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, author_id: user.id }, format: :json}.to_not change(Answer, :count)
         end
 
         it 'redirects to question' do
-          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, author_id: user.id }, format: :js
+          post :create, params: { answer: attributes_for(:answer, :invalid), question_id: question.id, author_id: user.id }, format: :json
 
-          expect(response).to render_template :create
           expect(assigns(:answer)).not_to eq answer
         end
       end

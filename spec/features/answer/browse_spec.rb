@@ -7,10 +7,12 @@ feature 'User can browse answers', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question) }
-  before { question.vote = Vote.new }
+  given!(:question) { create(:question) }
+  before { question.build_vote.save }
   given!(:answers) { create_list(:answer, 5, question: question) }
-  before { answer.vote = Vote.new }
+  before { answers.each do |a|
+            a.build_vote.save
+            end }
   
   
     scenario 'Authenticated user can browse answers' do

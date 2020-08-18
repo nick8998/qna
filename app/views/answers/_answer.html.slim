@@ -4,7 +4,7 @@ table
       td class="a-best-body" style = "color: red" data = {answer_id: answer.id} 
         = answer.body
         .voting-answer
-          =render answer.vote, resource: answer
+          =render 'votes/vote', resource: answer
       -if current_user&.author_of?(answer)
         td= link_to 'Destroy answer', answer, class: 'destroy-answer', data: { confirm: 'Are you sure?' }, method: :delete, :remote => true
         td= link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
@@ -17,7 +17,7 @@ table
       td class="a-body" data = {answer_id: answer.id} 
         = answer.body
         .voting-answer
-          =render answer.vote, resource: answer
+          =render 'votes/vote', resource: answer
       -if answer.files.attached?
         -answer.files.each do |file|
           td= link_to file.filename.to_s, url_for(file)
