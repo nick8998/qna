@@ -7,7 +7,6 @@ feature 'Author can delete answer', %q{
 } do
   given(:user) { create(:user) }
   given(:question) { create(:question) }
-  before { question.build_vote.save }
 
     scenario 'Unauthenticated can not edit answer' do
       visit question_path(question)
@@ -17,7 +16,6 @@ feature 'Author can delete answer', %q{
 
     describe 'Not author', js: true do
       given!(:answer) { create(:answer, question: question) }
-      before { answer.vote = Vote.new } 
 
       scenario  "can't destroy answer" do
         sign_in(user)
@@ -28,7 +26,6 @@ feature 'Author can delete answer', %q{
 
   describe 'Author', js: true do
     given!(:answer) { create(:answer, question: question, author: user) }
-    before { answer.vote = Vote.new }
     background do
       sign_in(user)
       visit question_path(question)

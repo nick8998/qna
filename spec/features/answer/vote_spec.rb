@@ -9,9 +9,6 @@ feature 'User can vote for answer', %q{
   given(:user) { create(:user) }
   given(:question) { create(:question, author: user) }
   given!(:answer) { create(:answer, question: question, author: user) }
-
-  before { question.build_vote.save }
-  before { answer.build_vote.save }
   
   given(:user1) { create(:user) }
     
@@ -25,10 +22,11 @@ feature 'User can vote for answer', %q{
     scenario "Authenticated user can't choose best answer", js: true do
       sign_in(user1)
       visit question_path(question)
-      within '.voting-answer' do
+      within '.voting', match: :first do
         expect(page).to have_link "Up"
         expect(page).to have_link "Down"
         expect(page).to have_link "Cancel"
+
 
         click_on "Up"
         expect(page).to have_content("1")

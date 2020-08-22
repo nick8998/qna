@@ -3,7 +3,7 @@ table
     -if answer.best?
       td class="a-best-body" style = "color: red" data = {answer_id: answer.id} 
         = answer.body
-        .voting-answer
+        .voting
           =render 'votes/vote', resource: answer
       -if current_user&.author_of?(answer)
         td= link_to 'Destroy answer', answer, class: 'destroy-answer', data: { confirm: 'Are you sure?' }, method: :delete, :remote => true
@@ -16,7 +16,7 @@ table
     -else
       td class="a-body" data = {answer_id: answer.id} 
         = answer.body
-        .voting-answer
+        .voting
           =render 'votes/vote', resource: answer
       -if answer.files.attached?
         -answer.files.each do |file|

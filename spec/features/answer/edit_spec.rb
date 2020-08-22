@@ -8,9 +8,7 @@ feature 'User can edit his answer', %q{
 
   given!(:user) { create(:user) }
   given!(:question) { create(:question) }
-  before { question.build_vote.save }
   given!(:answer) { create(:answer, question: question, author: user) }
-  before { answer.build_vote.save }
 
   scenario 'Unauthenticated can not edit answer' do
     visit question_path(question)
@@ -20,7 +18,6 @@ feature 'User can edit his answer', %q{
 
   describe 'Not author' do
       given!(:answer) { create(:answer, question: question) } 
-      before { answer.vote = Vote.new }
 
       scenario  "can't destroy answer" do
         sign_in(user)
@@ -32,7 +29,6 @@ feature 'User can edit his answer', %q{
   describe 'Author', js: true do
     given!(:user1) { create(:user) }
     given!(:answer1) { create(:answer, question: question, author: user1) }
-    before { answer1.vote = Vote.new }
 
     background do
       sign_in(user)

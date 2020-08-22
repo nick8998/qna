@@ -1,8 +1,6 @@
 class Vote < ApplicationRecord
   belongs_to :votable, polymorphic: true
+  belongs_to :user
 
-  has_many :votes_users, dependent: :destroy
-  has_many :users, through: :votes_users, dependent: :destroy
-
-  validates :value, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :value, numericality: { only_integer: true }
 end

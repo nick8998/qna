@@ -5,6 +5,7 @@
       = link_to 'Down', "/#{resource.class.name.pluralize.downcase}/#{resource.id}/vote_down", :method => :put, remote: true
       = link_to 'Cancel', "/#{resource.class.name.pluralize.downcase}/#{resource.id}/vote_cancel", :method => :delete, remote: true
 
-p class="voting-result"= resource.vote.value
+.voting-result
+  p= resource.votes.sum(:value)
 
 .new-result

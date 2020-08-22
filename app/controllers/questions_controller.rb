@@ -21,9 +21,7 @@ class QuestionsController < ApplicationController
   def edit;  end
 
   def create
-    @question = Question.new(question_params)
-    @question.author = current_user
-    @question.build_vote.save
+    @question = Question.new(question_params.merge(author: current_user))
     if @question.save
       redirect_to @question, notice: "Your question successfully created."
     else 

@@ -5,9 +5,7 @@ class AnswersController < ApplicationController
   before_action :find_question, only: %i[create]
 
   def create
-    @answer = @question.answers.create(answer_params)
-    @answer.author = current_user
-    @answer.build_vote.save
+    @answer = @question.answers.create(answer_params.merge(author: current_user))
     respond_to do |format|
       if @answer.save
         format.json { render json: @answer }

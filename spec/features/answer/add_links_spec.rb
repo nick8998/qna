@@ -10,7 +10,6 @@ feature 'User can add links to answer', %q{
   given!(:question) {create(:question)}
   given(:gist_url) { 'https://gist.github.com/nick8998/521d82a43ca5854899666d91bf757b03' }
   given(:google_url) { 'http://google.com' }
-  before { question.build_vote.save }
 
    describe 'Authenticated user' do
       background do

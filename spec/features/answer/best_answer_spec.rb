@@ -9,8 +9,6 @@ feature 'User can choose best answer', %q{
   given(:user) { create(:user) }
   given!(:question) { create(:question, author: user) }
   given!(:answer) { create(:answer, question: question) }
-  before { question.build_vote.save }
-  before { answer.build_vote.save }
   
   given(:user1) { create(:user) }
     
@@ -36,7 +34,6 @@ feature 'User can choose best answer', %q{
     end
 
     given!(:answer2) { create(:answer, body: "text text", question: question) }
-    before { answer2.vote = Vote.new }
     scenario "Best answer is first", js: true do
       sign_in(user)
       visit question_path(question)

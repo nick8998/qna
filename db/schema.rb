@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_15_095934) do
+ActiveRecord::Schema.define(version: 2020_08_15_095030) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -89,19 +89,11 @@ ActiveRecord::Schema.define(version: 2020_08_15_095934) do
     t.integer "value", default: 0
     t.string "votable_type"
     t.integer "votable_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["votable_type", "votable_id"], name: "index_votes_on_votable_type_and_votable_id"
-  end
-
-  create_table "votes_users", force: :cascade do |t|
     t.integer "user_id"
-    t.integer "vote_id"
-    t.boolean "voted", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["user_id"], name: "index_votes_users_on_user_id"
-    t.index ["vote_id"], name: "index_votes_users_on_vote_id"
+    t.index ["user_id"], name: "index_votes_on_user_id"
+    t.index ["votable_type", "votable_id"], name: "index_votes_on_votable_type_and_votable_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -110,6 +102,5 @@ ActiveRecord::Schema.define(version: 2020_08_15_095934) do
   add_foreign_key "questions", "users", column: "author_id"
   add_foreign_key "rewards", "questions"
   add_foreign_key "rewards", "users"
-  add_foreign_key "votes_users", "users"
-  add_foreign_key "votes_users", "votes"
+  add_foreign_key "votes", "users"
 end

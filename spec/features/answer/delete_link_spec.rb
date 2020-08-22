@@ -8,9 +8,7 @@ feature 'User can delete links to answer', %q{
 
   given(:user) { create(:user) }
   given!(:question) { create(:question) }
-  before { question.build_vote.save }
   given!(:answer) { create(:answer, question: question, author: user, links_attributes: [ {name: "Google", url: "https://google.com"} ]) }
-  before { answer.build_vote.save }
 
 
    describe 'Author', js:true do

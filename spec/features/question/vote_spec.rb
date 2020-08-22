@@ -7,10 +7,7 @@ feature 'User can vote for question', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question, author: user) }
-
-  before { question.build_vote.save }
-  
+  given(:question) { create(:question, author: user) }  
   given(:user1) { create(:user) }
     
     scenario "Unauthenticated user can't vote for answer" do
@@ -23,7 +20,7 @@ feature 'User can vote for question', %q{
     scenario "Authenticated user can't choose best answer", js: true do
       sign_in(user1)
       visit question_path(question)
-      within '.voting-question' do
+      within '.voting' do
         expect(page).to have_link "Up"
         expect(page).to have_link "Down"
         expect(page).to have_link "Cancel"
