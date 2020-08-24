@@ -21,13 +21,13 @@ feature 'User can vote for question', %q{
     scenario "Result in voting is right", js:true do
       sign_in(user1)
       visit question_path(question)
-      click_on "Up"
+      click_on "Down"
       click_on 'Logout'
       sign_in(user2)
       visit question_path(question)
       click_on "Down"
       within '.voting-result' do
-        expect(page).to have_content("0")
+        expect(page).to have_content("-2")
       end 
     end
 
@@ -41,7 +41,7 @@ feature 'User can vote for question', %q{
         within '.voting' do
           expect(page).to have_link "Up"
           expect(page).to have_link "Down"
-
+          expect(page).not_to have_link("Cancel")
           click_on "Up"
           expect(page).to have_content("1")
           expect(page).to have_link("Cancel")
