@@ -8,8 +8,8 @@ Rails.application.routes.draw do
   devise_for :users
   root to: 'questions#index'
 
-  resources :questions, :concerns => :votable do
-    resources :answers, :concerns => :votable, shallow: true, only: %i[create update destroy] do
+  resources :questions, concerns: :votable do
+    resources :answers, concerns: :votable, shallow: true, only: %i[create update destroy] do
       patch :update_best, on: :member
     end
   end
