@@ -1,12 +1,6 @@
 p = link_to 'Ask question', new_question_path
 
-table class="table"
-  tr
-    th= "Title"
-    th= "Body"
-    th= "Action"
-    -@questions.each do |question|
-      tr
-        td=question.title
-        td=question.body
-        td=link_to 'Show', question_path(question)
+.questions-list
+  -@questions.each do |question|
+    = render "question_for_index", question: question  
+  

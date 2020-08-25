@@ -22,4 +22,5 @@ Rails.application.routes.draw do
     resources :rewards, only: :index
   end
 
+  mount ActionCable.server => '/cable'
 end
