@@ -7,7 +7,7 @@ feature 'User can choose best answer', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question, author: user) }
+  given!(:question) { create(:question, author: user) }
   given!(:answer) { create(:answer, question: question) }
   
   given(:user1) { create(:user) }

@@ -29,6 +29,7 @@ feature 'User can edit his answer', %q{
   describe 'Author', js: true do
     given!(:user1) { create(:user) }
     given!(:answer1) { create(:answer, question: question, author: user1) }
+
     background do
       sign_in(user)
       visit question_path(question)

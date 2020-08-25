@@ -19,9 +19,9 @@ feature 'User can create answer the question', %q{
       scenario 'answer the question' do
         fill_in 'Body', with: 'text text text'
         click_on 'To answer'
-        within '.a-body' do
-          expect(page).to have_content 'text text text'
-        end
+        
+        expect(page).to have_content 'text text text'
+        
         expect(page).to have_current_path question_path(question)
       end
 
@@ -31,15 +31,7 @@ feature 'User can create answer the question', %q{
         expect(page).to have_current_path question_path(question)
       end
 
-      scenario 'answers the question with attached file' do
-        fill_in 'Body', with: "text text"
-
-        attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
-        click_on 'To answer'
-
-        expect(page).to have_link 'rails_helper.rb'
-        expect(page).to have_link 'spec_helper.rb'
-      end
+      
     end
 
     scenario 'Unauthenticated user tries to answer a question' do

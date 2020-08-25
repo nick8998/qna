@@ -4,6 +4,8 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of :email }
   it { should validate_presence_of :password }
   it { should have_many(:rewards).dependent(:destroy) }
+  it { should have_many(:votes).dependent(:destroy) }
+  it { should have_many(:votes).through(:votes_users).dependent(:destroy) }
 
   describe '#author_of?' do
     let(:user) { create(:user) }

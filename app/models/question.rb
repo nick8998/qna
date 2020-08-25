@@ -1,4 +1,8 @@
 class Question < ApplicationRecord
+
+  include VotableModel
+  has_many :votes, dependent: :destroy, as: :votable
+
   belongs_to :author, class_name: "User", optional: true 
 
   has_many :answers, dependent: :destroy

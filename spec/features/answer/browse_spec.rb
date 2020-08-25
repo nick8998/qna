@@ -7,7 +7,7 @@ feature 'User can browse answers', %q{
 } do
 
   given(:user) { create(:user) }
-  given(:question) { create(:question) }
+  given!(:question) { create(:question) }
   given!(:answers) { create_list(:answer, 5, question: question) }
   
   

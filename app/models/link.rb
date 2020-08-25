@@ -1,6 +1,5 @@
 class Link < ApplicationRecord
   belongs_to :linkable, polymorphic: true
-  belongs_to :author, class_name: "User", optional: true 
 
   validates :name, :url, presence: true
 

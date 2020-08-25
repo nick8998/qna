@@ -15,7 +15,7 @@ feature 'Author can delete answer', %q{
     end
 
     describe 'Not author', js: true do
-      given!(:answer) { create(:answer, question: question) } 
+      given!(:answer) { create(:answer, question: question) }
 
       scenario  "can't destroy answer" do
         sign_in(user)

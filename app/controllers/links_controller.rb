@@ -4,7 +4,7 @@ class LinksController < ApplicationController
   before_action :find_link
 
   def destroy
-    if current_user.author_of?(@link)
+    if current_user.author_of?(@link.linkable)
       @link.destroy
     end
   end

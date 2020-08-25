@@ -1,14 +1,17 @@
-  class AnswersController < ApplicationController
+class AnswersController < ApplicationController
+  include Votable
   before_action :authenticate_user!
   before_action :find_answer, only: %i[destroy update update_best]
   before_action :find_question, only: %i[create]
 
   def create
-    @answer = @question.answers.create(answer_params)
-    @answer.update(author_id: current_user.id)
-    #При создании линки, присоединяем автора для каждой линки. Для это проходим по всем и добавляем автора. Работает.
-    @answer.links.each do |link|
-      link.author = current_user
+    @answer = @question.answers.create(answer_params.merge(author: current_user))
+    respond_to do |format|
+      if @answer.save
+        format.json { render json: @answer }
+      else
+        format.json { render json: @answer.errors.full_messages, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -16,12 +19,6 @@
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
       @question = @answer.question
-      #При апдейте ответа, проходим так же по каждой линке и добавляем автора. И тут уже не работает, link.author = nil.
-      @answer.links.each do |link|
-        if link.author.nil?
-          link.author = current_user
-        end
-      end
       flash[:notice] = "You answer was updated"
     else
       flash[:alert] = "You can't update answer"
@@ -51,14 +48,14 @@
   private 
 
   def find_answer
-    @answer = Answer.find(params[:id])
+    @answer = Answer.with_attached_files.find(params[:id])
   end
 
   def find_question
-    @question = Question.find(params[:question_id])
+    @question = Question.with_attached_files.find(params[:question_id])
   end
 
   def answer_params
-    params.require(:answer).permit(:body, files: [], links_attributes: [:id, :name, :url, :_destroy, :author])    
+    params.require(:answer).permit(:body, files: [], links_attributes: [:id, :name, :url, :_destroy])    
   end
 end

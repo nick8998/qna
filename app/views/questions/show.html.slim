@@ -8,6 +8,9 @@
 .question
   =render @question
 
+.voting
+  =render 'votes/vote', resource: @question
+
 .answer-flash
 
 .answers
@@ -16,7 +19,7 @@
 .answer-errors
   = render 'shared/errors', resource: @answer
 
-= form_with model: [@question, @answer], class: 'new-answer' do |f|
+= form_with model: [@question, @answer], class: 'new-answer', data: { type: :html } do |f|
   p
     = f.label :body
     = f.text_area :body

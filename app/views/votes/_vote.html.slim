@@ -1,0 +1,14 @@
+-if current_user.present?
+  -if !current_user.author_of?(resource) 
+    p 
+      -if resource.votes.find_by(user: current_user).nil?
+        = link_to 'Up', polymorphic_path(resource, action: :vote_up), :method => :put, remote: true, class: 'voting-up', data: { id: resource.id, type: resource.class.name }
+        = link_to 'Down', polymorphic_path(resource, action: :vote_down), :method => :put, remote: true, class: 'voting-down', data: { id: resource.id, type: resource.class.name }
+        = link_to 'Cancel', polymorphic_path(resource, action: :vote_cancel), :method => :delete, remote: true, class: 'voting-cancel hidden', data: { id: resource.id, type: resource.class.name }
+      -else
+        = link_to 'Up', polymorphic_path(resource, action: :vote_up), :method => :put, remote: true, class: 'voting-up hidden', data: { id: resource.id, type: resource.class.name }
+        = link_to 'Down', polymorphic_path(resource, action: :vote_down), :method => :put, remote: true, class: 'voting-down hidden', data: { id: resource.id, type: resource.class.name }
+        = link_to 'Cancel', polymorphic_path(resource, action: :vote_cancel), :method => :delete, remote: true, class: 'voting-cancel', data: { id: resource.id, type: resource.class.name }
+
+
+  p class="voting-result" data-type=resource.class.name data-id=resource.id = resource.votes.sum(:value)

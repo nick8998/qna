@@ -11,7 +11,7 @@ feature 'User can add links to answer', %q{
   given(:gist_url) { 'https://gist.github.com/nick8998/521d82a43ca5854899666d91bf757b03' }
   given(:google_url) { 'http://google.com' }
 
-   describe 'Authenticated user', js:true do
+   describe 'Authenticated user' do
       background do
         sign_in(user)
 
@@ -25,10 +25,11 @@ feature 'User can add links to answer', %q{
       fill_in 'Url', with: google_url
 
       click_on 'To answer'
+      visit question_path(question)
 
-      within '.answers' do
-        expect(page).to have_link 'My gist', href: google_url
-      end
+      
+      expect(page).to have_link 'My gist', href: google_url
+      
     end
 
     scenario 'adds some links when give an answer', js: true do
