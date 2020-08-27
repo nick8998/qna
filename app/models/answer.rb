@@ -1,6 +1,7 @@
 class Answer < ApplicationRecord
   include VotableModel
   has_many :votes, dependent: :destroy, as: :votable
+  has_many :comments, dependent: :destroy, as: :commentable
 
   belongs_to :author, class_name: "User", optional: true 
   belongs_to :question

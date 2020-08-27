@@ -9,6 +9,7 @@
     "actioncable": "^5.2.4-3",
     "actioncable-modules": "^5.2.2-1",
     "jquery": "^3.5.1",
+    "skim": "^0.1.1",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",

@@ -1293,6 +1293,11 @@ async@^2.6.2:
   dependencies:
     lodash "^4.17.14"
 
+async@~0.1.22:
+  version "0.1.22"
+  resolved "https://registry.yarnpkg.com/async/-/async-0.1.22.tgz#0fc1aaa088a0e3ef0ebe2d8831bab0dcf8845061"
+  integrity sha1-D8GqoIig4+8Ovi2IMbqw3PiEUGE=
+
 asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
@@ -2236,6 +2241,14 @@ css-what@^3.2.1:
   resolved "https://registry.yarnpkg.com/css-what/-/css-what-3.3.0.tgz#10fec696a9ece2e591ac772d759aacabac38cd39"
   integrity sha512-pv9JPyatiPaQ6pf4OvD/dbfm0o5LviWmwxNWzblYf/1u9QZd0ihV+PMwy5jdQWQ3349kZmKEx9WXuSka2dM4cg==
 
+cssax@0.0.6:
+  version "0.0.6"
+  resolved "https://registry.yarnpkg.com/cssax/-/cssax-0.0.6.tgz#3c1bc12a910c38dea8b2a012051c801059f52a8a"
+  integrity sha1-PBvBKpEMON6osqASBRyAEFn1Koo=
+  dependencies:
+    ent "0.0.4"
+    sax "~0.4.2"
+
 cssdb@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/cssdb/-/cssdb-4.4.0.tgz#3bf2f2a68c10f5c6a08abd92378331ee803cddb0"
@@ -2614,6 +2627,11 @@ enhanced-resolve@^4.1.0, enhanced-resolve@^4.1.1:
     graceful-fs "^4.1.2"
     memory-fs "^0.5.0"
     tapable "^1.0.0"
+
+ent@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/ent/-/ent-0.0.4.tgz#532820d894818a4b3abd452ba38a625c2ff8b6a7"
+  integrity sha1-Uygg2JSBiks6vUUro4piXC/4tqc=
 
 entities@^2.0.0:
   version "2.0.3"
@@ -4476,6 +4494,11 @@ multicast-dns@^6.0.1:
     dns-packet "^1.3.1"
     thunky "^1.0.2"
 
+mute-stream@~0.0.4:
+  version "0.0.8"
+  resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.8.tgz#1630c42b2251ff81e2a283de96a5497ea92e5e0d"
+  integrity sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==
+
 nan@^2.12.1, nan@^2.13.2:
   version "2.14.1"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.1.tgz#d7be34dfa3105b91494c3147089315eff8874b01"
@@ -5927,6 +5950,13 @@ read-pkg@^1.0.0:
     normalize-package-data "^2.3.2"
     path-type "^1.0.0"
 
+read@~1.0.4:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/read/-/read-1.0.7.tgz#b3da19bd052431a97671d44a42634adf710b40c4"
+  integrity sha1-s9oZvQUkMal2cdRKQmNK33ELQMQ=
+  dependencies:
+    mute-stream "~0.0.4"
+
 "readable-stream@1 || 2", readable-stream@^2.0.0, readable-stream@^2.0.1, readable-stream@^2.0.2, readable-stream@^2.0.6, readable-stream@^2.1.5, readable-stream@^2.2.2, readable-stream@^2.3.3, readable-stream@^2.3.6, readable-stream@~2.3.6:
   version "2.3.7"
   resolved "https://registry.yarnpkg.com/readable-stream/-/readable-stream-2.3.7.tgz#1eca1cf711aef814c04f62252a36a62f6cb23b57"
@@ -6222,6 +6252,11 @@ sass-loader@7.3.1:
     pify "^4.0.1"
     semver "^6.3.0"
 
+sax@~0.4.2:
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/sax/-/sax-0.4.3.tgz#700e3a34eb2e792ce380791c71280f3731965ddc"
+  integrity sha1-cA46NOsueSzjgHkccSgPNzGWXdw=
+
 sax@~1.2.4:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
@@ -6407,6 +6442,15 @@ simple-swizzle@^0.2.2:
   integrity sha1-pNprY1/8zMoz9w0Xy5JZLeleVXo=
   dependencies:
     is-arrayish "^0.3.1"
+
+skim@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/skim/-/skim-0.1.1.tgz#d701686872caf3eb4e350945013ccfae5a10285b"
+  integrity sha1-1wFoaHLK8+tONQlFATzPrloQKFs=
+  dependencies:
+    async "~0.1.22"
+    cssax "0.0.6"
+    read "~1.0.4"
 
 snapdragon-node@^2.0.1:
   version "2.1.1"

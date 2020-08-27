@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   include Votable
+  include Commentable
   before_action :authenticate_user!, except: %i[index show]
   before_action :find_question, only: %i[show edit update destroy update_best]
 
@@ -11,6 +12,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
+    @comment = Comment.new
     @answer.links.new
   end
 
@@ -23,7 +25,6 @@ class QuestionsController < ApplicationController
   def edit;  end
 
   def create
-
     @question = Question.new(question_params.merge(author: current_user))
     if @question.save
       redirect_to @question, notice: "Your question successfully created."

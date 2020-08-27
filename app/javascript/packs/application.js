@@ -11,6 +11,7 @@ require("jquery")
 require("answer")
 require("question")
 require("vote")
+require("comment")
 require("direct_uploads")
 require("src/cocoon")
 
