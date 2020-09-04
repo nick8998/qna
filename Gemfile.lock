@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/seekingalpha/jst.git
+  revision: 0e7864b4ca052a339e2e67435438f48b95a48395
+  specs:
+    jst (0.0.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -1218,6 +1224,7 @@ DEPENDENCIES
   gon
   jbuilder (~> 2.7)
   jquery-rails
+  jst!
   launchy
   listen (~> 3.2)
   puma (~> 4.1)

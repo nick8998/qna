@@ -55,7 +55,7 @@ class AnswersController < ApplicationController
     return if @answer.errors.any?
     ActionCable.server.broadcast( 
       "/questions/#{params[:id]}/answers",
-      answer: @answer )  
+      { answer: @answer } )  
   end
 
   def find_answer

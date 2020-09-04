@@ -53,7 +53,6 @@ class QuestionsController < ApplicationController
   end
 
   private
-
   def publish_question
     return if @question.errors.any?
     ActionCable.server.broadcast( 
