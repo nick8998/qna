@@ -21,7 +21,7 @@ table
       -if answer.files.attached?
         -answer.files.each do |file|
           td= link_to file.filename.to_s, url_for(file)
-      -if current_user&.author_of?(answer.question) && !answer.best?
+      -if can?(:update_best, Answer) && !answer.best?
         td= link_to 'Best', update_best_answer_path(answer), class: 'best-answer-link', data: { answer_id: answer.id }, method: :patch, :remote => true
       -if current_user&.author_of?(answer)
         td= link_to 'Destroy answer', answer, class: 'destroy-answer', data: { confirm: 'Are you sure?' }, method: :delete, :remote => true
@@ -46,8 +46,9 @@ table
             -if current_user&.author_of?(link.linkable)
               = link_to 'Delete link', link_path(link.id), class: 'destroy-link', method: :delete, remote: true
 
-.create_comment
-  =render 'comments/create_comment', resource: answer
+-if can?(:create, Comment)
+  .create_comment
+    =render 'comments/create_comment', resource: answer
 
 -if answer.comments.any?
   h2= "Answer's comments"

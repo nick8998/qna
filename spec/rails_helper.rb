@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'cancan/matchers'
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
 

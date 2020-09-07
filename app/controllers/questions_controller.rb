@@ -1,10 +1,11 @@
 class QuestionsController < ApplicationController
   include Votable
   include Commentable
-  before_action :authenticate_user!, except: %i[index show]
   before_action :find_question, only: %i[show edit update destroy update_best]
 
   after_action :publish_question, only: %i[create]
+
+  authorize_resource
 
   def index
     @questions = Question.all
@@ -34,6 +35,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
+    @comment = Comment.new
     if current_user.author_of?(@question)
       @question.update(question_params)
       flash[:notice] = "Your question was updated"

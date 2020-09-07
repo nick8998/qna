@@ -3,6 +3,10 @@ module Votable
 
   include RenderJson
 
+  included do
+    authorize_resource
+  end
+  
   def vote_up
     if !current_user.author_of?(votable)
       votable.create_positive_vote(current_user)

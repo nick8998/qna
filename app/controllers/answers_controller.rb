@@ -1,10 +1,10 @@
 class AnswersController < ApplicationController
   include Votable
   include Commentable
-  before_action :authenticate_user!
   before_action :find_answer, only: %i[destroy update update_best]
   before_action :find_question, only: %i[create]
   after_action :publish_answer, only: %i[create]
+  authorize_resource
 
   def create
     @answer = @question.answers.create(answer_params.merge(author: current_user))
@@ -20,6 +20,7 @@ class AnswersController < ApplicationController
 
 
   def update
+    @comment = Comment.new
     if current_user.author_of?(@answer)
       @answer.update(answer_params)
       @question = @answer.question
@@ -30,6 +31,7 @@ class AnswersController < ApplicationController
   end
 
   def update_best 
+    @comment = Comment.new
     @question = @answer.question
     if current_user.author_of?(@question)
       @answer.choose_best

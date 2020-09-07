@@ -40,6 +40,8 @@ gem 'aws-sdk', '~> 3'
 gem "cocoon"
 gem 'validate_url'
 
+gem "cancancan"
+
 gem 'dotenv-rails', :groups => [:development, :test]
 
 group :development, :test do

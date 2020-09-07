@@ -5,6 +5,7 @@ module Commentable
 
   included do
     after_action :publish_commentable, only: %i[create_comment]
+    authorize_resource
   end
 
   def create_comment
