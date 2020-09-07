@@ -29,13 +29,14 @@ module Commentable
   end
 
   def comment_params
-    params.require(:commentable).permit(:body)
+    params.require(:commentable).permit(:body, :commentable_id)
   end
 
   def publish_commentable
-    comment_class = commentable.class.name.pluralize.downcase
-    return if commentable.errors.any?
-    ActionCable.server.broadcast("/#{comment_class}/#{params[:id]}/create_comment", { comment: @comment } )  
+
+      comment_class = commentable.class.name.pluralize.downcase
+      return if commentable.errors.any?
+      ActionCable.server.broadcast("/#{comment_class}/#{params[:id]}/create_comment", { comment: @comment } ) 
   end
 
 end
