@@ -29,7 +29,7 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 gem "slim-rails"
-gem 'sprockets', '3.6.3'
+gem 'sprockets', '3.7.2'
 
 gem 'devise'
 gem 'gon'
