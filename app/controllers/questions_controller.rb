@@ -36,22 +36,11 @@ class QuestionsController < ApplicationController
 
   def update
     @comment = Comment.new
-    if current_user.author_of?(@question)
-      @question.update(question_params)
-      flash[:notice] = "Your question was updated"
-    else
-      flash[:alert] = "You can't update question" 
-    end
-    
+    @question.update(question_params)
   end
 
   def destroy
-    if current_user.author_of?(@question)
-      @question.destroy
-      redirect_to questions_path, notice: "Question was destroyed"
-    else
-      redirect_to questions_path, alert: "You can't destroy question"
-    end
+    @question.destroy
   end
 
   private

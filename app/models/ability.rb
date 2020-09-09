@@ -20,13 +20,15 @@ class Ability
 
   def user_abilities
     guest_abilities
-    can :update_best, Answer, question: { author_id: @user.id }
+    can :update_best, Answer, question: { author: @user }
     can :destroy, [Question, Answer], { author_id: @user.id }
+    can :destroy, Link, linkable: { author_id: @user.id }
     can :destroy, Comment, { user_id: @user.id }
-    can :create, [Question, Answer, Comment]
+    can :create, [Question, Answer, Link]
+    can :create_comment, [Question, Answer]
     can :update, [Answer, Question], author_id: @user.id
     can :update, Comment, user_id: @user.id
-    can [:vote_up, :vote_down, :vote_cancel], Vote
+    can [:vote_up, :vote_down, :vote_cancel], [Question, Answer], { author_id: !@user.id }
   end
 
   def admin_abilities

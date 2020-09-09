@@ -17,8 +17,9 @@
 
 .answer-flash
 
-.answers
-  = render @question.answers.best_answer_first
+-if can?(:read, Answer)
+  .answers
+    = render @question.answers.best_answer_first
 
 .answer-errors
   = render 'shared/errors', resource: @answer

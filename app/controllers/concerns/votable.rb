@@ -2,23 +2,15 @@ module Votable
   extend ActiveSupport::Concern
 
   include RenderJson
-
-  included do
-    authorize_resource
-  end
   
   def vote_up
-    if !current_user.author_of?(votable)
-      votable.create_positive_vote(current_user)
-    end
+    votable.create_positive_vote(current_user)
     render_json_voting
   end
 
 
   def vote_down
-    if !current_user.author_of?(votable)
-      votable.create_negative_vote(current_user)
-    end
+    votable.create_negative_vote(current_user)
     render_json_voting
   end
 
