@@ -29,9 +29,10 @@ gem 'jbuilder', '~> 2.7'
 gem 'bootsnap', '>= 1.4.2', require: false
 
 gem "slim-rails"
+gem 'sprockets', '3.6.3'
 
 gem 'devise'
-
+gem 'gon'
 gem 'jquery-rails'
 gem 'aws-sdk', '~> 3'
 gem "cocoon"
@@ -67,5 +68,4 @@ group :test do
   gem 'launchy'
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+

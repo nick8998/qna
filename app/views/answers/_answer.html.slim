@@ -46,6 +46,12 @@ table
             -if current_user&.author_of?(link.linkable)
               = link_to 'Delete link', link_path(link.id), class: 'destroy-link', method: :delete, remote: true
 
+.create_comment
+  =render 'comments/create_comment', resource: answer
+
+-if answer.comments.any?
+  h2= "Answer's comments"
+  =render 'comments/comments', resource: answer
 
 
 

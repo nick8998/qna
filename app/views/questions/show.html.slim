@@ -8,6 +8,10 @@
 .question
   =render @question
 
+-if @question.comments.any?
+  h2= "Question's comments"
+  =render 'comments/comments', resource: @question
+
 .voting
   =render 'votes/vote', resource: @question
 

@@ -1,0 +1,7 @@
+form action="/answers/#{@id}" data-remote="true" method="post" accepts-charset="UTF-8" id="edit-answer-2" enctype="multipart/form-data"
+  input type="hidden" name="_method" value="patch"
+  label for="answer_body" Your answer
+  textarea name="answer[body]" id="answer_body" =@body
+  label for="answer_files" Files
+  input multiple="multiple" data-direct-upload-url="http://localhost:3000/rails/active_storage/direct_uploads" type="file" name="answer[files][]" id="answer_files"
+  input type="submit" name="commit" value="Save" data-disable-with="Save"

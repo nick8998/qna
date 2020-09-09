@@ -2,6 +2,10 @@ h1 class="q-title"= question.title
 p class="q-body"= question.body
 
 
+.create_comment
+  =render 'comments/create_comment', resource: question
+
+
 -if !question.reward.nil?
   p= question.reward.title
   -if question.reward.image.attached?
@@ -11,11 +15,11 @@ p class="q-body"= question.body
   -question.files.each do |file|
     p= link_to file.filename.to_s, url_for(file)
 
--if @question.links.any?
+-if question.links.any?
   .links
     p Links:
     ul
-      -@question.links.each do |link|
+      -question.links.each do |link|
         -if link.gist?
           li
             = link.name
@@ -31,7 +35,7 @@ p class="q-body"= question.body
 
 
 -if current_user&.author_of?(question)
-    p= link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: @question.id }
+    p= link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: question.id }
     p= link_to 'Destroy question', question_path(@question), method: :delete
 
 = form_with model: question, class: 'hidden', html: { id: "edit-question-#{question.id}" } do |f|

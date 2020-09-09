@@ -1,0 +1,4 @@
+= form_for @comment, as: :commentable,:remote => true, :html => {:'data-type' => 'json', :multipart => true}, url: polymorphic_path(resource, action: :create_comment), method: :post do |f|
+  = f.label :body, 'Your comment'
+  = f.text_area :body
+  = f.submit 'Create Comment', data: { id: resource.id, type: resource.class.name }

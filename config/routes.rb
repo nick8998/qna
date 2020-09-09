@@ -4,12 +4,15 @@ Rails.application.routes.draw do
     put :vote_down, on: :member
     delete :vote_cancel, on: :member
   end
+  concern :commentable do
+    post :create_comment, on: :member
+  end
 
   devise_for :users
   root to: 'questions#index'
 
-  resources :questions, concerns: :votable do
-    resources :answers, concerns: :votable, shallow: true, only: %i[create update destroy] do
+  resources :questions, concerns: %i[votable commentable] do
+    resources :answers, concerns: %i[votable commentable], shallow: true, only: %i[create update destroy] do
       patch :update_best, on: :member
     end
   end
@@ -22,4 +25,5 @@ Rails.application.routes.draw do
     resources :rewards, only: :index
   end
 
+  mount ActionCable.server => '/cable'
 end

@@ -1,7 +1,10 @@
 class QuestionsController < ApplicationController
   include Votable
+  include Commentable
   before_action :authenticate_user!, except: %i[index show]
   before_action :find_question, only: %i[show edit update destroy update_best]
+
+  after_action :publish_question, only: %i[create]
 
   def index
     @questions = Question.all
@@ -9,6 +12,7 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
+    @comment = Comment.new
     @answer.links.new
   end
 
@@ -21,7 +25,6 @@ class QuestionsController < ApplicationController
   def edit;  end
 
   def create
-
     @question = Question.new(question_params.merge(author: current_user))
     if @question.save
       redirect_to @question, notice: "Your question successfully created."
@@ -50,6 +53,16 @@ class QuestionsController < ApplicationController
   end
 
   private
+  def publish_question
+    return if @question.errors.any?
+    ActionCable.server.broadcast( 
+      'questions', 
+      ApplicationController.render(
+        partial: 'questions/question_for_index',
+        locals: { question: @question }
+        )
+      )
+  end
 
   def find_question
     @question = Question.with_attached_files.find(params[:id])
@@ -60,4 +73,5 @@ class QuestionsController < ApplicationController
     params.require(:question).permit(:title, :body, files: [], links_attributes: [:id, :name, :url, :_destroy], reward_attributes: [:title, :image])    
   end
 
+  
 end

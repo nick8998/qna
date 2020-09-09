@@ -1,8 +1,10 @@
 class AnswersController < ApplicationController
   include Votable
+  include Commentable
   before_action :authenticate_user!
   before_action :find_answer, only: %i[destroy update update_best]
   before_action :find_question, only: %i[create]
+  after_action :publish_answer, only: %i[create]
 
   def create
     @answer = @question.answers.create(answer_params.merge(author: current_user))
@@ -14,6 +16,8 @@ class AnswersController < ApplicationController
       end
     end
   end
+
+
 
   def update
     if current_user.author_of?(@answer)
@@ -46,6 +50,13 @@ class AnswersController < ApplicationController
   end
 
   private 
+
+  def publish_answer
+    return if @answer.errors.any?
+    ActionCable.server.broadcast( 
+      "/questions/#{params[:id]}/answers",
+      { answer: @answer } )  
+  end
 
   def find_answer
     @answer = Answer.with_attached_files.find(params[:id])
