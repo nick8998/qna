@@ -20,7 +20,10 @@ class Ability
 
   def user_abilities
     guest_abilities
-    can :update_best, Answer, question: { author: @user }
+    can :update_best, Answer do |answer|
+      answer.question.author_id == @user.id
+    end 
+    #question: { author_id: @user.id }
     can :destroy, [Question, Answer], { author_id: @user.id }
     can :destroy, Link, linkable: { author_id: @user.id }
     can :destroy, Comment, { user_id: @user.id }
