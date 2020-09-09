@@ -28,7 +28,12 @@ class Ability
     can :create_comment, [Question, Answer]
     can :update, [Answer, Question], author_id: @user.id
     can :update, Comment, user_id: @user.id
-    can [:vote_up, :vote_down, :vote_cancel], [Question, Answer], { author_id: !@user.id }
+    can [:vote_up, :vote_down, :vote_cancel], Question do |question|
+      question.author_id != @user.id
+    end 
+    can [:vote_up, :vote_down, :vote_cancel], Answer do |answer|
+      answer.author_id != @user.id
+    end
   end
 
   def admin_abilities
