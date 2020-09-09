@@ -1,9 +1,3 @@
-GIT
-  remote: https://github.com/seekingalpha/jst.git
-  revision: 0e7864b4ca052a339e2e67435438f48b95a48395
-  specs:
-    jst (0.0.3)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -1006,10 +1000,6 @@ GEM
       xpath (~> 3.2)
     childprocess (3.0.0)
     cocoon (1.2.14)
-    coffee-script (2.4.1)
-      coffee-script-source
-      execjs
-    coffee-script-source (1.12.2)
     concurrent-ruby (1.1.7)
     crass (1.0.6)
     devise (4.7.2)
@@ -1024,7 +1014,6 @@ GEM
       dotenv (= 2.7.6)
       railties (>= 3.2)
     erubi (1.9.0)
-    execjs (2.7.0)
     factory_bot (6.1.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.1.0)
@@ -1151,11 +1140,6 @@ GEM
       rubyzip (>= 1.2.2)
     shoulda-matchers (4.4.1)
       activesupport (>= 4.2.0)
-    skim (0.10.0)
-      coffee-script
-      coffee-script-source (>= 1.2.0)
-      slim (>= 3.0)
-      sprockets (>= 2, < 4)
     slim (4.1.0)
       temple (>= 0.7.6, < 0.9)
       tilt (>= 2.0.6, < 2.1)
@@ -1224,7 +1208,6 @@ DEPENDENCIES
   gon
   jbuilder (~> 2.7)
   jquery-rails
-  jst!
   launchy
   listen (~> 3.2)
   puma (~> 4.1)
@@ -1234,7 +1217,6 @@ DEPENDENCIES
   sass-rails (>= 6)
   selenium-webdriver
   shoulda-matchers (~> 4.0)
-  skim
   slim-rails
   spring
   spring-watcher-listen (~> 2.0.0)

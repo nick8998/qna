@@ -9,7 +9,6 @@ module Commentable
 
   def create_comment
     @comment = commentable.comments.new(comment_params.merge(user: current_user))
-    #тут рендерится дважды, один раз через канал, другой через json. Не очень понимаю, как это исправить.
     if @comment.save
       render_json_comment
     end
@@ -33,10 +32,10 @@ module Commentable
   end
 
   def publish_commentable
-
-      comment_class = commentable.class.name.pluralize.downcase
-      return if commentable.errors.any?
-      ActionCable.server.broadcast("/#{comment_class}/#{params[:id]}/create_comment", { comment: @comment } ) 
+    gon.commentable_type = commentable.class.name.pluralize.downcase
+    gon.commentable_id = @comment.commentable_id
+    return if commentable.errors.any?
+    ActionCable.server.broadcast("/questions/#{params[:id]}/create_comment", { comment: @comment } ) 
   end
 
 end

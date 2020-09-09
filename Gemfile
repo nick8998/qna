@@ -32,9 +32,7 @@ gem "slim-rails"
 gem 'sprockets', '3.6.3'
 
 gem 'devise'
-gem 'skim'
 gem 'gon'
-gem 'jst', github: 'seekingalpha/jst'
 gem 'jquery-rails'
 gem 'aws-sdk', '~> 3'
 gem "cocoon"
