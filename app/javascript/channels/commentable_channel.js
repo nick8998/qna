@@ -10,8 +10,6 @@ consumer.subscriptions.create("CommentableChannel", {
   },
 
   received(data) {
-  	console.log(data)
-  	//я написал Виталию, он сказал, что действительно есть проблема со ским и посоветовал handlebars, но если не выйдет с ним, можно так отрендерить.
     $('.comments[data-type="'+data['comment'].commentable_type+'"][data-id="'+data['comment'].commentable_id+'"]').append('<p>' + data['comment'].body + '</p>')
   }
 });
