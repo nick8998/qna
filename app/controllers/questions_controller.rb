@@ -1,10 +1,11 @@
 class QuestionsController < ApplicationController
   include Votable
   include Commentable
-  before_action :authenticate_user!, except: %i[index show]
   before_action :find_question, only: %i[show edit update destroy update_best]
 
   after_action :publish_question, only: %i[create]
+
+  authorize_resource
 
   def index
     @questions = Question.all
@@ -34,22 +35,12 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user.author_of?(@question)
-      @question.update(question_params)
-      flash[:notice] = "Your question was updated"
-    else
-      flash[:alert] = "You can't update question" 
-    end
-    
+    @comment = Comment.new
+    @question.update(question_params)
   end
 
   def destroy
-    if current_user.author_of?(@question)
-      @question.destroy
-      redirect_to questions_path, notice: "Question was destroyed"
-    else
-      redirect_to questions_path, alert: "You can't destroy question"
-    end
+    @question.destroy
   end
 
   private

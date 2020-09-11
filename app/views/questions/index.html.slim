@@ -1,6 +1,8 @@
-p = link_to 'Ask question', new_question_path
+-if can?(:create, Question)
+  p = link_to 'Ask question', new_question_path
 
-.questions-list
-  -@questions.each do |question|
-    = render "question_for_index", question: question  
+-if can?(:read, Question)
+  .questions-list
+    -@questions.each do |question|
+      = render "question_for_index", question: question  
   

@@ -1,9 +1,9 @@
 h1 class="q-title"= question.title
 p class="q-body"= question.body
 
-
-.create_comment
-  =render 'comments/create_comment', resource: question
+-if can?(:create_comment, Question)
+  .create_comment
+    =render 'comments/create_comment', resource: question
 
 
 -if !question.reward.nil?

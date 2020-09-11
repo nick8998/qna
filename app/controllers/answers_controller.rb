@@ -1,10 +1,10 @@
 class AnswersController < ApplicationController
   include Votable
   include Commentable
-  before_action :authenticate_user!
   before_action :find_answer, only: %i[destroy update update_best]
   before_action :find_question, only: %i[create]
   after_action :publish_answer, only: %i[create]
+  authorize_resource
 
   def create
     @answer = @question.answers.create(answer_params.merge(author: current_user))
@@ -17,36 +17,21 @@ class AnswersController < ApplicationController
     end
   end
 
-
-
   def update
-    if current_user.author_of?(@answer)
-      @answer.update(answer_params)
-      @question = @answer.question
-      flash[:notice] = "You answer was updated"
-    else
-      flash[:alert] = "You can't update answer"
-    end
+    @comment = Comment.new
+    @answer.update(answer_params)
+    @question = @answer.question
   end
 
   def update_best 
+    @comment = Comment.new
     @question = @answer.question
-    if current_user.author_of?(@question)
-      @answer.choose_best
-      flash[:notice] = "This answer is best"
-    else
-      flash[:alert] = "You can't choose best answer"
-    end
+    @answer.choose_best
   end
 
   def destroy
-    if current_user.author_of?(@answer)
-      @question = @answer.question
-      @answer.destroy
-      flash[:notice] = "Answer was deleted"
-    else
-      flash[:alert] = "You can't delete answer"
-    end
+    @question = @answer.question
+    @answer.destroy
   end
 
   private 

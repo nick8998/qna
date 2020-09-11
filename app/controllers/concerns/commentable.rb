@@ -28,7 +28,7 @@ module Commentable
   end
 
   def comment_params
-    params.require(:commentable).permit(:body, :commentable_id)
+    params.require(:commentable).permit(:body)
   end
 
   def publish_commentable
