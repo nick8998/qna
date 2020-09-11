@@ -21,9 +21,8 @@ class Ability
   def user_abilities
     guest_abilities
     can :update_best, Answer do |answer|
-      answer.question.author_id == @user.id
+      @user.author_of?(answer.question)
     end 
-    #question: { author_id: @user.id }
     can :destroy, [Question, Answer], { author_id: @user.id }
     can :destroy, Link, linkable: { author_id: @user.id }
     can :destroy, Comment, { user_id: @user.id }
@@ -32,10 +31,10 @@ class Ability
     can :update, [Answer, Question], author_id: @user.id
     can :update, Comment, user_id: @user.id
     can [:vote_up, :vote_down, :vote_cancel], Question do |question|
-      question.author_id != @user.id
+      !@user.author_of?(question)
     end 
     can [:vote_up, :vote_down, :vote_cancel], Answer do |answer|
-      answer.author_id != @user.id
+      !@user.author_of?(answer)
     end
   end
 

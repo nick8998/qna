@@ -36,26 +36,26 @@ describe Ability do
     it { should be_able_to :destroy, Link }
     it { should be_able_to :destroy, Comment }
 
-    it { should be_able_to :update, create(:question, author: user), user: user}
-    it { should_not be_able_to :update, create(:question, author: other), user: user}
+    it { should be_able_to :update, create(:question, author: user)}
+    it { should_not be_able_to :update, create(:question, author: other)}
 
-    it { should be_able_to :update, create(:answer, author: user, question: question), user: user}
-    it { should_not be_able_to :update, create(:answer, author: other, question: question), user: user}
+    it { should be_able_to :update, create(:answer, author: user, question: question)}
+    it { should_not be_able_to :update, create(:answer, author: other, question: question)}
 
-    it { should be_able_to :update, create(:comment, user: user, commentable: question), user: user}
-    it { should_not be_able_to :update, create(:comment, user: other, commentable: question), user: user}
+    it { should be_able_to :update, create(:comment, user: user, commentable: question)}
+    it { should_not be_able_to :update, create(:comment, user: other, commentable: question)}
 
-    it { should be_able_to :vote_up, create(:answer, author: other, question: question), user: user }
-    it { should_not be_able_to :vote_up, create(:answer, author: user, question: question), user: user }
+    it { should be_able_to :vote_up, create(:answer, author: other, question: question)}
+    it { should_not be_able_to :vote_up, create(:answer, author: user, question: question) }
 
-    it { should be_able_to :vote_down, create(:answer, author: other, question: question), user: user }
-    it { should_not be_able_to :vote_down, create(:answer, author: user, question: question), user: user }
+    it { should be_able_to :vote_down, create(:answer, author: other, question: question) }
+    it { should_not be_able_to :vote_down, create(:answer, author: user, question: question) }
 
-    it { should be_able_to :vote_cancel, create(:answer, author: other, question: question), user: user }
-    it { should_not be_able_to :vote_cancel, create(:answer, author: user, question: question), user: user }
+    it { should be_able_to :vote_cancel, create(:answer, author: other, question: question) }
+    it { should_not be_able_to :vote_cancel, create(:answer, author: user, question: question) }
 
-    it { should be_able_to :update_best, create(:answer, author: other, question: create(:question, author_id: user.id)), user: user }
-    it { should_not be_able_to :update_best, create(:answer, author: user, question: question), user: other }
+    it { should be_able_to :update_best, create(:answer, author: other, question: create(:question, author_id: user.id)) }
+    it { should_not be_able_to :update_best, create(:answer, author: user, question: question) }
 
   end
 
