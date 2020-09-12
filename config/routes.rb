@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  use_doorkeeper
   concern :votable do
     put :vote_up, on: :member
     put :vote_down, on: :member
@@ -23,6 +24,15 @@ Rails.application.routes.draw do
 
   namespace :user do
     resources :rewards, only: :index
+  end
+
+  namespace :api do
+    namespace :v1 do
+      resources :profiles, only: [] do
+        get :me, on: :collection
+      end
+      resources :questions, only: %i[index]
+    end
   end
 
   mount ActionCable.server => '/cable'
