@@ -1,5 +1,4 @@
 class Api::V1::AnswersController < Api::V1::BaseController
-
   before_action :find_answer, only: %i[show destroy update]
   before_action :find_question, only: %i[create]
 
