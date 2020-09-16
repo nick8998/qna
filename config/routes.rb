@@ -30,6 +30,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :profiles, only: [] do
         get :me, on: :collection
+        get :other_profiles, on: :collection
       end
       resources :questions, only: %i[index show destroy update create] do
         resources :answers, only: %i[show destroy update create], shallow: true

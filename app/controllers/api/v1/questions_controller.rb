@@ -1,4 +1,6 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
+  authorize_resource
+  before_action :find_question, only: %i[show destroy update]
 
   def index
     @questions = Question.all
@@ -6,7 +8,6 @@ class Api::V1::QuestionsController < Api::V1::BaseController
   end
 
   def show
-    @question = Question.with_attached_files.find(params[:id])
     render json: @question
   end
 
@@ -15,33 +16,33 @@ class Api::V1::QuestionsController < Api::V1::BaseController
     if @question.save
       render json: @question
     else 
-     render json: {
-            status: :unprocessable_entity, # 422
-        }
+      head :forbidden
     end
   end
 
   def destroy
-    @question = Question.with_attached_files.find(params[:id])
     @question.destroy
     if @question.errors.any?
-        render json: {
-            status: :unprocessable_entity, # 422
-        }
+      head :forbidden
     else
-        render json: {
-            status: :ok, # 200
-        }
+      head :ok
     end
   end
 
   def update
-    @question = Question.with_attached_files.find(params[:id])
-    @question.update(question_params)
-    render json: @question
+    
+    if @question.update(question_params)
+      render json: @question
+    else
+      head :forbidden
+    end
   end
 
   private
+
+  def find_question
+    @question = Question.with_attached_files.find(params[:id])
+  end
 
   def question_params
     params.require(:question).permit(:title, :body, files: [], links_attributes: [:id, :name, :url, :_destroy], reward_attributes: [:title, :image])    

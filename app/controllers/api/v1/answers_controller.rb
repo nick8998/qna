@@ -1,7 +1,8 @@
 class Api::V1::AnswersController < Api::V1::BaseController
   before_action :find_answer, only: %i[show destroy update]
   before_action :find_question, only: %i[create]
-
+  authorize_resource
+  
   def show
     render json: @answer
   end
@@ -11,28 +12,25 @@ class Api::V1::AnswersController < Api::V1::BaseController
     if @answer.save
       render json: @answer
     else 
-     render json: {
-            status: :unprocessable_entity, # 422
-        }
+      head :forbidden
     end
   end
 
   def destroy
     @answer.destroy
     if @answer.errors.any?
-        render json: {
-            status: :unprocessable_entity, # 422
-        }
+      head :forbidden
     else
-        render json: {
-            status: :ok, # 200
-        }
+      head :ok
     end
   end
 
   def update
-    @answer.update(answer_params)
-    render json: @answer
+    if @answer.update(answer_params)
+      render json: @answer
+    else
+      head :forbidden
+    end
   end
 
 

@@ -23,6 +23,7 @@ class Ability
     can :update_best, Answer do |answer|
       @user.author_of?(answer.question)
     end 
+    can [:me, :other_profiles], User
     can :destroy, [Question, Answer], { author_id: @user.id }
     can :destroy, Link, linkable: { author_id: @user.id }
     can :destroy, Comment, { user_id: @user.id }

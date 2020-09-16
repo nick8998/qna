@@ -12,7 +12,7 @@ describe 'Answer API', type: :request do
 
   context 'authorized' do
     let(:user) { create(:user) }
-    let(:access_token) { create(:access_token) }
+    let(:access_token) { create(:access_token, resource_owner_id: user.id) }
     let!(:question) { create(:question, author: user) }
     let(:answer_response) { json['answer'] }
     let!(:answer) { create(:answer, question: question, author: user) }
