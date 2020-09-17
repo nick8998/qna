@@ -6,8 +6,6 @@ class ApplicationController < ActionController::Base
       format.js   { head :forbidden, content_type: 'text/html' }
     end
   end
-  def current_user
-    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
-  end
+  
   check_authorization :unless => :devise_controller?
 end

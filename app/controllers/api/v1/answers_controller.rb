@@ -11,15 +11,15 @@ class Api::V1::AnswersController < Api::V1::BaseController
     @answer = @question.answers.create(answer_params.merge(author: current_user))
     if @answer.save
       render json: @answer
-    else 
-      head :forbidden
+    else
+      render json: { status: :unprocessable_entity }, status: :unprocessable_entity
     end
   end
 
   def destroy
     @answer.destroy
     if @answer.errors.any?
-      head :forbidden
+      render json: { status: :unprocessable_entity }, status: :unprocessable_entity
     else
       head :ok
     end
@@ -29,7 +29,7 @@ class Api::V1::AnswersController < Api::V1::BaseController
     if @answer.update(answer_params)
       render json: @answer
     else
-      head :forbidden
+      render json: { status: :unprocessable_entity }, status: :unprocessable_entity
     end
   end
 
