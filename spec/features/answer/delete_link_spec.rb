@@ -17,10 +17,10 @@ feature 'User can delete links to answer', %q{
 
         visit question_path(question)
       end
-        scenario 'deletes link an answer', js: true do
-          click_on 'Delete link'
+      scenario 'deletes link an answer', js: true do
+        click_on 'Delete link'
 
-          expect(page).not_to have_link 'Google', href: "https://google.com"
-        end
+        expect(page).not_to have_link 'Google', href: "https://google.com"
+      end
   end
 end

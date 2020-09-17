@@ -6,6 +6,6 @@ class ApplicationController < ActionController::Base
       format.js   { head :forbidden, content_type: 'text/html' }
     end
   end
-
+  
   check_authorization :unless => :devise_controller?
 end

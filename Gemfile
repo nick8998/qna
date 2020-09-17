@@ -39,6 +39,9 @@ gem "cocoon"
 gem 'validate_url'
 
 gem "cancancan"
+gem "doorkeeper"
+gem "active_model_serializers", "~> 0.10"
+gem "oj"
 
 gem 'dotenv-rails', :groups => [:development, :test]
 
