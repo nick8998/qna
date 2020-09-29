@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_12_112537) do
+ActiveRecord::Schema.define(version: 2020_09_29_143424) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -126,6 +126,15 @@ ActiveRecord::Schema.define(version: 2020_09_12_112537) do
     t.index ["user_id"], name: "index_rewards_on_user_id"
   end
 
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "question_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["question_id"], name: "index_subscriptions_on_question_id"
+    t.index ["user_id"], name: "index_subscriptions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -159,5 +168,7 @@ ActiveRecord::Schema.define(version: 2020_09_12_112537) do
   add_foreign_key "questions", "users", column: "author_id"
   add_foreign_key "rewards", "questions"
   add_foreign_key "rewards", "users"
+  add_foreign_key "subscriptions", "questions"
+  add_foreign_key "subscriptions", "users"
   add_foreign_key "votes", "users"
 end

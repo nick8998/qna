@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   include Votable
   include Commentable
-  before_action :find_question, only: %i[show edit update destroy update_best]
+  before_action :find_question, only: %i[show edit update destroy update_best subscribe subscribe_cancel]
 
   after_action :publish_question, only: %i[create]
 
@@ -9,6 +9,21 @@ class QuestionsController < ApplicationController
 
   def index
     @questions = Question.all
+  end
+
+  def subscribe
+    if @question.subscriptions.find_by(user_id: current_user.id).nil?
+      subscriber = Subscription.new(question: @question, user: current_user)
+      subscriber.save!
+      redirect_to @question
+    else
+      redirect_to @question
+    end
+  end
+
+  def subscribe_cancel
+    @question.subscriptions.find_by(user_id: current_user).destroy
+    redirect_to @question
   end
 
   def show
@@ -27,6 +42,8 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params.merge(author: current_user))
+    subscriber = Subscription.new(question: @question, user: current_user)
+    subscriber.save!
     if @question.save
       redirect_to @question, notice: "Your question successfully created."
     else 

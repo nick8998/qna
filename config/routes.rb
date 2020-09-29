@@ -6,19 +6,24 @@ Rails.application.routes.draw do
   end
   
   use_doorkeeper
+
   concern :votable do
     put :vote_up, on: :member
     put :vote_down, on: :member
     delete :vote_cancel, on: :member
   end
+
   concern :commentable do
     post :create_comment, on: :member
   end
 
   devise_for :users
+
   root to: 'questions#index'
 
   resources :questions, concerns: %i[votable commentable] do
+    get :subscribe, on: :member
+    delete :subscribe_cancel, on: :member
     resources :answers, concerns: %i[votable commentable], shallow: true, only: %i[create update destroy] do
       patch :update_best, on: :member
     end
@@ -26,6 +31,7 @@ Rails.application.routes.draw do
 
 
   resources :attachments , only: %i[destroy]
+
   resources :links , only: %i[destroy]
 
   namespace :user do
