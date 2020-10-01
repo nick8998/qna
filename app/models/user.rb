@@ -21,4 +21,9 @@ class User < ApplicationRecord
   def author_of?(resourse)
     resourse.author_id == id
   end
+
+  def check_sub_question(subs)
+    question_ids.include?(subs.question_id)
+  end
+  
 end

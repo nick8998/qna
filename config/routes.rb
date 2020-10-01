@@ -22,13 +22,11 @@ Rails.application.routes.draw do
   root to: 'questions#index'
 
   resources :questions, concerns: %i[votable commentable] do
-    get :subscribe, on: :member
-    delete :subscribe_cancel, on: :member
+    resources :subscriptions, only: %i[create destroy], shallow: true
     resources :answers, concerns: %i[votable commentable], shallow: true, only: %i[create update destroy] do
       patch :update_best, on: :member
     end
   end
-
 
   resources :attachments , only: %i[destroy]
 

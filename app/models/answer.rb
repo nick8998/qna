@@ -14,6 +14,8 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
 
+  after_create :notify
+
   def choose_best
     ActiveRecord::Base.transaction do
       old_best_answer = question.answers.find_by(best: true)
@@ -24,5 +26,11 @@ class Answer < ApplicationRecord
       update!(best: true)
       author.rewards << question.reward if question.reward.present?
     end
+  end
+
+  private
+
+  def notify
+    NewAnswersJob.perform_now
   end
 end

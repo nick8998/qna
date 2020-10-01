@@ -1,9 +1,11 @@
 class AnswersController < ApplicationController
   include Votable
   include Commentable
+
   before_action :find_answer, only: %i[destroy update update_best]
   before_action :find_question, only: %i[create]
   after_action :publish_answer, only: %i[create]
+
   authorize_resource
 
   def create
@@ -54,4 +56,5 @@ class AnswersController < ApplicationController
   def answer_params
     params.require(:answer).permit(:body, files: [], links_attributes: [:id, :name, :url, :_destroy])    
   end
+
 end

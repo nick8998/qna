@@ -11,21 +11,6 @@ class QuestionsController < ApplicationController
     @questions = Question.all
   end
 
-  def subscribe
-    if @question.subscriptions.find_by(user_id: current_user.id).nil?
-      subscriber = Subscription.new(question: @question, user: current_user)
-      subscriber.save!
-      redirect_to @question
-    else
-      redirect_to @question
-    end
-  end
-
-  def subscribe_cancel
-    @question.subscriptions.find_by(user_id: current_user).destroy
-    redirect_to @question
-  end
-
   def show
     @answer = Answer.new
     @comment = Comment.new
@@ -42,8 +27,6 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params.merge(author: current_user))
-    subscriber = Subscription.new(question: @question, user: current_user)
-    subscriber.save!
     if @question.save
       redirect_to @question, notice: "Your question successfully created."
     else 

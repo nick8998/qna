@@ -6,7 +6,12 @@ class DailyDigestMailer < ApplicationMailer
   #   en.daily_digest_mailer.digest.subject
   #
   def digest(user)
-    @greeting = Question.where('created_at > ?', Time.now - 24.hours)
+
+    Question.where('created_at > ?', Time.now - 24.hours).each do |question|
+      @greeting = "Заголовок вопроса : #{question.title}
+                  Вопрос: #{question.body}
+                  Email Автора: #{question.author.email}"
+    end
 
     mail to: user.email
   end

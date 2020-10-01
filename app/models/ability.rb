@@ -27,11 +27,14 @@ class Ability
     can :destroy, [Question, Answer], { author_id: @user.id }
     can :destroy, Link, linkable: { author_id: @user.id }
     can :destroy, Comment, { user_id: @user.id }
+    can :destroy, Subscription, { user_id: @user.id }
+    can :create, Subscription do |subs|
+      @user.check_sub_question(subs)
+    end
     can :create, [Question, Answer, Link]
     can :create_comment, [Question, Answer]
     can :update, [Answer, Question], author_id: @user.id
-    can :update, Comment, user_id: @user.id
-    can [:subscribe, :subscribe_cancel], Question 
+    can :update, Comment, user_id: @user.id 
     can [:vote_up, :vote_down, :vote_cancel], Question do |question|
       !@user.author_of?(question)
     end 

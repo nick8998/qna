@@ -20,12 +20,17 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true 
 
-  after_create :calculate_reputation
+  after_create :calculate_reputation, :subscribe
 
 
   private
 
   def calculate_reputation
     ReputationJob.perform_later(self)
+  end
+
+  def subscribe
+    subscriber = Subscription.new(question: self, user: author)
+    subscriber.save!
   end
 end
