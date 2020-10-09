@@ -30,7 +30,6 @@ class Question < ApplicationRecord
   end
 
   def subscribe
-    subscriber = Subscription.new(question: self, user: author)
-    subscriber.save!
+    author.subscriptions.create(question: self)
   end
 end
