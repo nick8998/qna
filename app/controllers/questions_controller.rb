@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   include Votable
   include Commentable
-  before_action :find_question, only: %i[show edit update destroy update_best]
+  before_action :find_question, only: %i[show edit update destroy update_best subscribe subscribe_cancel]
 
   after_action :publish_question, only: %i[create]
 

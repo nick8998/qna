@@ -22,18 +22,22 @@ class Ability
     guest_abilities
     can :update_best, Answer do |answer|
       @user.author_of?(answer.question)
-    end 
-    can [:me, :other_profiles], User
+    end
+    can %i[me other_profiles], User
     can :destroy, [Question, Answer], { author_id: @user.id }
     can :destroy, Link, linkable: { author_id: @user.id }
     can :destroy, Comment, { user_id: @user.id }
+    can :destroy, Subscription, { user_id: @user.id }
+    can :create, Subscription, :question do |question|
+      @user.subscriptions.find_by(question_id: question.id).nil?
+    end
     can :create, [Question, Answer, Link]
     can :create_comment, [Question, Answer]
-    can :update, [Answer, Question], author_id: @user.id
+    can :update, [Answer, Question], { author_id: @user.id }
     can :update, Comment, user_id: @user.id
     can [:vote_up, :vote_down, :vote_cancel], Question do |question|
       !@user.author_of?(question)
-    end 
+    end
     can [:vote_up, :vote_down, :vote_cancel], Answer do |answer|
       !@user.author_of?(answer)
     end

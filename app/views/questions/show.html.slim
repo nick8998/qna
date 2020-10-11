@@ -8,6 +8,11 @@
 .question
   =render @question
 
+-if can?(:create, Subscription)
+  =link_to 'Subscribe', question_subscriptions_path(@question), method: :post
+-else
+  =link_to 'Unsubscribe', subscription_path, method: :delete
+
 -if @question.comments.any?
   h2= "Question's comments"
   =render 'comments/comments', resource: @question
