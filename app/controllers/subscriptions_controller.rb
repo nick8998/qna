@@ -1,18 +1,19 @@
 class SubscriptionsController < ApplicationController
 
   before_action :set_question, only: %i[create]
-  authorize_resource
 
   def create
     if can?(:create, Subscription)
       current_user.subscriptions.create(question: @question)
     end
     redirect_to @question
+    authorize! :create, @question
   end
 
   def destroy
     Subscription.find_by(params[:id]).destroy
     redirect_to root_path
+    authorize! :destroy, Subscription
   end
 
   private

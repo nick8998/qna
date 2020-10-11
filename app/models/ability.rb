@@ -28,7 +28,7 @@ class Ability
     can :destroy, Link, linkable: { author_id: @user.id }
     can :destroy, Comment, { user_id: @user.id }
     can :destroy, Subscription, { user_id: @user.id }
-    can :create, Subscription do |question|
+    can :create, Subscription, :question do |question|
       @user.subscriptions.find_by(question_id: question.id).nil?
     end
     can :create, [Question, Answer, Link]
